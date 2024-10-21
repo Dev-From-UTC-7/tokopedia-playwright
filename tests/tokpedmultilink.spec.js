@@ -77,7 +77,7 @@ async function saveToJson(data, filename) {
 
 test('tokopedia multi link', async ({ browser }) => {
   const config = {
-    startPrice: 500000,
+    startPrice: 200000,
     endPrice: 1500000,
   };
 
