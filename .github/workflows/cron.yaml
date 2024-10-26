@@ -27,7 +27,7 @@ jobs:
             ~/.npm
             node_modules
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-node-${{ hashFiles('**/bun.lockb') }}
+          key: ${{ runner.os }}-bun
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -44,8 +44,8 @@ jobs:
 
       - name: Install Microsoft Edge (if not cached)
         run: |
-          if [ ! -d ~/.cache/ms-playwright/chromium ]; then
-          bun playwright install msedge
+          if [ ! -d ~/.cache/ms-playwright/msedge ]; then
+            bun playwright install msedge
           fi
 
       - name: Install Playwright browsers (Firefox only if not cached)
