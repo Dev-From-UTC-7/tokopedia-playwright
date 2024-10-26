@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -15,10 +16,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.0.4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20"
+          bun-version: latest
 
       - name: Cache node modules and Playwright browsers
         uses: actions/cache@v4.1.1
@@ -32,22 +32,22 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
       - name: Install Microsoft Edge (if not cached)
         run: |
           if [ ! -d ~/.cache/ms-playwright/chromium ]; then
-          npx playwright install msedge
+          bun playwright install msedge
           fi
 
       - name: Install Playwright browsers (Firefox only if not cached)
         run: |
           if [ ! -d ~/.cache/ms-playwright/firefox ]; then
-            npx playwright install firefox
+            bun playwright install firefox
           fi
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: bun playwright test
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
