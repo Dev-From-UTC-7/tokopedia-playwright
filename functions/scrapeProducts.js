@@ -76,8 +76,8 @@ async function scrollToBottom(page) {
 }
 
 async function navigateToNextPage(page) {
-  const maxRetries = 3; // Maximum number of retries
-  const initialTimeout = 10000; // Initial timeout in milliseconds
+  const maxRetries = 5; // Increased maximum number of retries
+  const initialTimeout = 15000; // Increased initial timeout in milliseconds
   const timeoutIncrement = 5000; // Increment timeout by this amount on each retry
   const contentLoadedSelector = '.css-1sn1xa2'; // Selector indicating content is loaded
 
@@ -86,8 +86,14 @@ async function navigateToNextPage(page) {
 
   while (retryCount < maxRetries) {
     try {
+      // Ensure the next button is visible before clicking
+      await page.waitForSelector('[data-testid="btnShopProductPageNext"]:not([disabled])', { timeout: currentTimeout });
+
+      // Add a small delay before clicking the next button
+      await page.waitForTimeout(500);
+
       const navigationPromise = page.waitForNavigation({
-        waitUntil: 'domcontentloaded',
+        waitUntil: 'networkidle2', // Use networkidle2 for more reliable navigation
         timeout: currentTimeout,
       });
       await page.click('[data-testid="btnShopProductPageNext"]');
@@ -101,6 +107,7 @@ async function navigateToNextPage(page) {
       retryCount++;
       currentTimeout += timeoutIncrement;
       console.error(`Navigation timeout, retrying (attempt ${retryCount})...`);
+      console.error(error);
     }
   }
 
