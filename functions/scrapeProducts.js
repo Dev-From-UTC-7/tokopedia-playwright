@@ -89,7 +89,7 @@ async function navigateToNextPage(page) {
   while (retryCount < maxRetries) {
     try {
       // Ensure the next button is visible before clicking
-      await page.waitForSelector('[data-testid="btnShopProductPageNext"]:not([disabled])', { timeout: currentTimeout });
+      // await page.waitForSelector('[data-testid="btnShopProductPageNext"]:not([disabled])', { timeout: currentTimeout });
 
       // Add a small delay before clicking the next button
       await page.waitForTimeout(500);
@@ -98,7 +98,7 @@ async function navigateToNextPage(page) {
       await page.click('[data-testid="btnShopProductPageNext"]');
 
       // Wait for the specific selector indicating content is loaded
-      await page.waitForSelector(contentLoadedSelector, { timeout: currentTimeout });
+      // await page.waitForSelector(contentLoadedSelector, { timeout: currentTimeout });
 
       break; // Break out of the loop if navigation is successful
     } catch (error) {
