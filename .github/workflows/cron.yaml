@@ -35,7 +35,12 @@ jobs:
         run: bun install
 
       - name: Check Cache Playwright browsers
-        run: du -hs ~/.cache/ms-playwright/*
+        run: |
+          if [ -d ~/.cache/ms-playwright ]; then
+            du -hs ~/.cache/ms-playwright/*
+          else
+            echo "Playwright cache directory does not exist."
+          fi
 
       - name: Install Microsoft Edge (if not cached)
         run: |
