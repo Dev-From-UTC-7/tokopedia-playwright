@@ -20,9 +20,10 @@ async function scrapeProducts(page, url, config) {
           const name = element.querySelector('[data-testid="linkProductName"]').textContent.trim();
           const priceText = element.querySelector('[data-testid="linkProductPrice"]').textContent.trim();
           const price = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
+          const urlProduct = element.querySelector('.css-gwkf0u').getAttribute('href');
 
           if (price >= config.startPrice && price <= config.endPrice) {
-            products.push({ name, price });
+            products.push({ name, price, urlProduct });
           }
         } else {
           stockEmptyStatus = true;

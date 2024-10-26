@@ -13,6 +13,7 @@ async function comparePrices(newData, oldData) {
         name: newProduct.name,
         oldPrice: oldProduct.price,
         newPrice: newProduct.price,
+        urlProduct: newProduct.urlProduct
       });
     }
   });
@@ -33,7 +34,8 @@ test('tokopedia multi link', async ({ browser }) => {
     'https://www.tokopedia.com/moticc/etalase/in-ear-monitor',
     'https://www.tokopedia.com/csi-zone/etalase/earphone',
     'https://www.tokopedia.com/yankeeofficial/etalase/kiwi-ears',
-    'https://www.tokopedia.com/yankeeofficial/etalase/simgot'
+    'https://www.tokopedia.com/yankeeofficial/etalase/simgot',
+    'https://www.tokopedia.com/kupingsensi/product'
   ];
 
   const allProducts = [];

@@ -7,7 +7,7 @@ const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
 async function notifyPriceDrops(priceDrops) {
   if (priceDrops.length > 0) {
     const message = priceDrops
-      .map((drop) => `${drop.name}: ${drop.oldPrice} -> ${drop.newPrice}`)
+      .map((drop) => `${drop.name}: ${drop.oldPrice} -> ${drop.newPrice}\nlink : ${drop.urlProduct}`)
       .join('\n');
     await bot.sendMessage(TELEGRAM_CHAT_ID, `Price drops detected:\n${message}`);
   }
