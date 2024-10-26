@@ -27,12 +27,15 @@ jobs:
             ~/.npm
             node_modules
             ~/.cache/ms-playwright
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: bun install
+
+      - name: Check Cache Playwright browsers
+        run: du -hs ~/.cache/ms-playwright/*
 
       - name: Install Microsoft Edge (if not cached)
         run: |
