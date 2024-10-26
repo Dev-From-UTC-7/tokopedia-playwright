@@ -12,8 +12,7 @@ This project is a web scraper that monitors product prices on Tokopedia and send
 
 ## Prerequisites
 
-- Node.js (v20 or later)
-- npm (Node Package Manager)
+- Bun
 - A Telegram bot token and chat ID
 
 ## Installation
@@ -28,7 +27,7 @@ This project is a web scraper that monitors product prices on Tokopedia and send
 2. Install dependencies:
 
    ```
-   npm install
+   bun install
    ```
 
 3. Set up environment variables (see Configuration section)
@@ -49,7 +48,7 @@ Replace `your_telegram_bot_token` and `your_telegram_chat_id` with your actual T
 To run the scraper manually:
 
 ```
-npx playwright test
+bun playwright test
 ```
 
 The scraper will run automatically on the schedule defined in the `.github/workflows/cron.yaml` file.
