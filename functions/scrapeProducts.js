@@ -1,3 +1,4 @@
+
 async function scrapeProducts(page, url, config) {
   let products = [];
   await page.goto(url);
@@ -14,6 +15,7 @@ async function scrapeProducts(page, url, config) {
       let stockEmptyStatus = false;
 
       productElements.forEach((element) => {
+        const cleanUrl = (url) => new URL(url).origin + new URL(url).pathname;
         const emptyStockIdentifier = element.querySelector('.css-szwojr');
         if (emptyStockIdentifier == null) {
           const name = element.querySelector('[data-testid="linkProductName"]').textContent.trim();
@@ -22,7 +24,7 @@ async function scrapeProducts(page, url, config) {
           const urlProduct = element.querySelector('.css-gwkf0u').getAttribute('href');
 
           if (price >= config.startPrice && price <= config.endPrice) {
-            products.push({ name, price, urlProduct });
+            products.push({ name, price, urlProduct: cleanUrl(urlProduct) });
           }
         } else {
           stockEmptyStatus = true;
@@ -76,8 +78,8 @@ async function scrollToBottom(page) {
 }
 
 async function navigateToNextPage(page) {
-  const maxRetries = 5; // Increased maximum number of retries
-  const initialTimeout = 15000; // Increased initial timeout in milliseconds
+  const maxRetries = 5; // Maximum number of retries
+  const initialTimeout = 15000; // Initial timeout in milliseconds
   const timeoutIncrement = 5000; // Increment timeout by this amount on each retry
   const contentLoadedSelector = '.css-1sn1xa2'; // Selector indicating content is loaded
 
@@ -92,12 +94,8 @@ async function navigateToNextPage(page) {
       // Add a small delay before clicking the next button
       await page.waitForTimeout(500);
 
-      const navigationPromise = page.waitForNavigation({
-        waitUntil: 'networkidle2', // Use networkidle2 for more reliable navigation
-        timeout: currentTimeout,
-      });
+      // Click the next button
       await page.click('[data-testid="btnShopProductPageNext"]');
-      await navigationPromise;
 
       // Wait for the specific selector indicating content is loaded
       await page.waitForSelector(contentLoadedSelector, { timeout: currentTimeout });
@@ -107,7 +105,6 @@ async function navigateToNextPage(page) {
       retryCount++;
       currentTimeout += timeoutIncrement;
       console.error(`Navigation timeout, retrying (attempt ${retryCount})...`);
-      console.error(error);
     }
   }
 
