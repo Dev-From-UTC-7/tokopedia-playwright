@@ -5,10 +5,8 @@ async function scrapeProducts(page, url, config) {
   let stockEmptyStatus = false;
 
   while (true) {
-    await page.waitForTimeout(1000);
-    await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
     await scrollToBottom(page);
-    await page.waitForTimeout(1000);
+    await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
 
     const pageProducts = await page.evaluate((config) => {
       const productElements = document.querySelectorAll('.css-1sn1xa2');
@@ -62,7 +60,19 @@ async function waitForSelectorWithTimeout(page, selector, timeout) {
 }
 
 async function scrollToBottom(page) {
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const scrollStep = 500; // Amount to scroll in each step
+  const scrollDelay = 100; // Delay between each scroll step in milliseconds
+
+  await page.evaluate(async ({ scrollStep, scrollDelay }) => {
+    const scrollHeight = document.body.scrollHeight;
+    let currentScroll = 0;
+
+    while (currentScroll < scrollHeight) {
+      window.scrollBy(0, scrollStep);
+      currentScroll += scrollStep;
+      await new Promise(resolve => setTimeout(resolve, scrollDelay));
+    }
+  }, { scrollStep, scrollDelay });
 }
 
 async function navigateToNextPage(page) {
