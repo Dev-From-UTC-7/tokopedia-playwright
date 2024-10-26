@@ -100,12 +100,12 @@ async function navigateToNextPage(page) {
     } catch (error) {
       retryCount++;
       currentTimeout += timeoutIncrement;
-      logger.error(`Navigation timeout, retrying (attempt ${retryCount})...`);
+      console.error(`Navigation timeout, retrying (attempt ${retryCount})...`);
     }
   }
 
   if (retryCount === maxRetries) {
-    logger.error('Navigation failed after maximum retries, continuing the script...');
+    console.error('Navigation failed after maximum retries, continuing the script...');
   }
 }
 
