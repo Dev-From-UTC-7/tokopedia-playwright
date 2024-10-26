@@ -5,6 +5,7 @@ async function scrapeProducts(page, url, config) {
   let stockEmptyStatus = false;
 
   while (true) {
+    await page.waitForTimeout(1000);
     await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
     await scrollToBottom(page);
     await page.waitForTimeout(1000);
