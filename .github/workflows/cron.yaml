@@ -42,11 +42,11 @@ jobs:
             echo "Playwright cache directory does not exist."
           fi
 
-      - name: Install Microsoft Edge (if not cached)
-        run: |
-          if [ ! -d ~/.cache/ms-playwright/msedge ]; then
-            bun playwright install msedge
-          fi
+      # - name: Install Microsoft Edge (if not cached)
+      #   run: |
+      #     if [ ! -d ~/.cache/ms-playwright/msedge ]; then
+      #       bun playwright install msedge
+      #     fi
 
       - name: Install Playwright browsers (Firefox only if not cached)
         run: |
