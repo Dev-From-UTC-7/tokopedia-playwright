@@ -34,6 +34,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Microsoft Edge (if not cached)
+        run: |
+          if [ ! -d ~/.cache/ms-playwright/chromium ]; then
+          npx playwright install msedge
+          fi
+
       - name: Install Playwright browsers (Firefox only if not cached)
         run: |
           if [ ! -d ~/.cache/ms-playwright/firefox ]; then
