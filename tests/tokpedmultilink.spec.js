@@ -1,51 +1,8 @@
 require('dotenv').config();
 import { test } from '@playwright/test';
 import fs from 'fs';
-const TelegramBot = require('node-telegram-bot-api');
-
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
-
-async function scrapeProducts(page, url, config) {
-  let products = [];
-  await page.goto(url);
-  await page.waitForSelector('.css-1sn1xa2', { timeout: 10000 });
-
-  while (true) {
-    await page.waitForSelector('.prd_link-product-price');
-
-    const pageProducts = await page.evaluate((config) => {
-      const productElements = document.querySelectorAll('.css-1sn1xa2');
-      const products = [];
-
-      productElements.forEach((element) => {
-        const name = element.querySelector('[data-testid="linkProductName"]').textContent.trim();
-        const priceText = element.querySelector('[data-testid="linkProductPrice"]').textContent.trim();
-        const price = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
-
-        if (price >= config.startPrice && price <= config.endPrice) {
-          products.push({ name, price });
-        }
-      });
-
-      return products;
-    }, config);
-
-    products = products.concat(pageProducts);
-
-    const nextButton = await page.$('[data-testid="btnShopProductPageNext"]');
-    if (nextButton) {
-      const navigationPromise = page.waitForNavigation({ waitUntil: 'networkidle' });
-      await nextButton.click();
-      await navigationPromise; // Wait for the next page to load
-    } else {
-      break;
-    }
-  }
-  return products;
-}
+import { scrapeProducts } from '../functions/scrapeProducts';
+import { notifyPriceDrops } from '../functions/telegramHelper';
 
 async function comparePrices(newData, oldData) {
   const priceDrops = [];
@@ -60,15 +17,6 @@ async function comparePrices(newData, oldData) {
     }
   });
   return priceDrops;
-}
-
-async function notifyPriceDrops(priceDrops) {
-  if (priceDrops.length > 0) {
-    const message = priceDrops
-      .map((drop) => `${drop.name}: ${drop.oldPrice} -> ${drop.newPrice}`)
-      .join('\n');
-    await bot.sendMessage(TELEGRAM_CHAT_ID, `Price drops detected:\n${message}`);
-  }
 }
 
 async function saveToJson(data, filename) {
@@ -106,6 +54,7 @@ test('tokopedia multi link', async ({ browser }) => {
     saveToJson(newData, 'products.json');
     const priceDrops = await comparePrices(newData, oldData);
     await notifyPriceDrops(priceDrops);
+    await context.close();
   } catch (error) {
     console.error('Error processing data:', error);
   }
