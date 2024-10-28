@@ -60,17 +60,14 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
-      - name: Check if products.json has changed
-        id: check_products_json
+      - name: Check, commit, and push changes if products.json has changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add products.json
-          git diff --quiet --exit-code -- products.json
-          echo "::set-output name=changed::$(test $? -eq 1 && echo true || echo false)"
-
-      - name: Commit and push changes if products.json has changed
-        if: steps.check_products_json.outputs.changed == 'true'
-        run: |
-          git commit -m "Update products.json" products.json
-          git push
+          if ! git diff-index --quiet HEAD -- products.json; then
+            git commit -m "Update products.json" products.json
+            git push origin HEAD:${{ github.ref }}
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_COMMIT }}
