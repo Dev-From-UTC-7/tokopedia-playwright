@@ -85,6 +85,11 @@
     "urlProduct": "https://www.tokopedia.com/moticc/tin-audio-t3-hifi-in-ear-monitor-earphone-with-mmcx"
   },
   {
+    "name": "Tanchjim Bunny DMT4 Ultra Dynamic Driver Earphone In Ear Monitor With Microphone",
+    "price": 319000,
+    "urlProduct": "https://www.tokopedia.com/csi-zone/tanchjim-bunny-dmt4-ultra-dynamic-driver-earphone-in-ear-monitor-with-microphone-jack-3-5mm-6fc53"
+  },
+  {
     "name": "KEFINE Klean 10mm DLC Diaphragm Dynamic Driver In Ear Monitor Earphone",
     "price": 829000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/kefine-klean-10mm-dlc-diaphragm-dynamic-driver-in-ear-monitor-earphone"
@@ -180,11 +185,6 @@
     "urlProduct": "https://www.tokopedia.com/csi-zone/simgot-ew300-1dd-1planar-1pzt-tribrid-driver-in-ear-monitor-earphone-standard-6ae26"
   },
   {
-    "name": "Moondrop Block Bluetooth True Wireless TWS Flat-head Earbuds Earphone",
-    "price": 314100,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/moondrop-block-bluetooth-true-wireless-tws-flat-head-earbuds-earphone-white-24a23"
-  },
-  {
     "name": "TRN Medusa 12mm 2nd Gen DLC Dynamic Driver In Ear Monitor Earphone",
     "price": 669000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/trn-medusa-12mm-2nd-gen-dlc-dynamic-driver-in-ear-monitor-earphone-with-mic-357dc"
@@ -206,8 +206,8 @@
   },
   {
     "name": "SoundPEATS Clear 12mm Dynamic Driver Bluetooth True Wireless TWS Earphone",
-    "price": 285000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/soundpeats-clear-12mm-dynamic-driver-bluetooth-true-wireless-tws-earphone-black-d7937"
+    "price": 262200,
+    "urlProduct": "https://www.tokopedia.com/csi-zone/soundpeats-clear-12mm-dynamic-driver-bluetooth-true-wireless-tws-earphone-beige-acbb7"
   },
   {
     "name": "Tin HIFI DUDU 13mm Planar Magnetic Driver In Ear Monitor Earphone",
@@ -246,7 +246,7 @@
   },
   {
     "name": "Tangzu x HBB XuanNv / Xuan Nv 2 Dynamic Driver Earphone In Ear Monitor",
-    "price": 1305000,
+    "price": 1320000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/tangzu-x-hbb-xuannv-xuan-nv-2-dynamic-driver-earphone-in-ear-monitor"
   },
   {
@@ -278,11 +278,6 @@
     "name": "TRN Conch 10mm Dual Magnetic DLC In Ear Monitor Earphone",
     "price": 379000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/trn-conch-10mm-dual-magnetic-dlc-in-ear-monitor-earphone"
-  },
-  {
-    "name": "Moondrop CHU 2 DSP In Ear Monitor Earphone With Mic & Type-C Plug",
-    "price": 395000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/moondrop-chu-2-dsp-in-ear-monitor-earphone-with-mic-type-c-plug"
   },
   {
     "name": "Moondrop MAY Dynamic + Planar Driver IEM With DSP Type C Plug & Mic",
@@ -367,7 +362,7 @@
   {
     "name": "Blon x HBB Z300 10mm Silicone Diaphragm In Ear Earphone",
     "price": 536750,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/blon-x-hbb-z300-10mm-silicone-diaphragm-in-ear-earphone-gold-4-4mm-no-mic"
+    "urlProduct": "https://www.tokopedia.com/csi-zone/blon-x-hbb-z300-10mm-silicone-diaphragm-in-ear-earphone-blue-4-4mm-no-mic"
   },
   {
     "name": "SIMGOT EW100P 10MM Dual-LCP Dynamic Driver In Ear Earphone",
@@ -387,7 +382,7 @@
   {
     "name": "TruthEar Gate 10mm Dynamic Driver In Ear Monitor Earphone",
     "price": 260000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/truthear-gate-10mm-dynamic-driver-in-ear-monitor-earphone-putih-no-mic-6dbbe"
+    "urlProduct": "https://www.tokopedia.com/csi-zone/truthear-gate-10mm-dynamic-driver-in-ear-monitor-earphone-hitam-no-mic-56c17"
   },
   {
     "name": "TruthEar Hexa 1DD + 3BA Hybrid Driver In Ear Monitor Earphone",
@@ -452,7 +447,7 @@
   {
     "name": "EPZ TP35 Dual CS43198 DAC Chip Amplifier Earphone Adapter",
     "price": 949000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/epz-tp35-dual-cs43198-dac-chip-amplifier-earphone-adapter-black-652e3"
+    "urlProduct": "https://www.tokopedia.com/kupingsensi/epz-tp35-dual-cs43198-dac-chip-amplifier-earphone-adapter-silver-72882"
   },
   {
     "name": "EPZ Q5 Pro IEM 2nd Gen Carbon Ceramic Composite Nano Diaphragm Driver Earphone",
@@ -488,6 +483,11 @@
     "name": "Kiwi Ears Allegro Mini Portable IEM DAC USB Type C to 3.5/4.4mm DAC Adapter",
     "price": 369000,
     "urlProduct": "https://www.tokopedia.com/kupingsensi/kiwi-ears-allegro-mini-portable-iem-dac-usb-type-c-to-3-5-4-4mm-dac-adapter"
+  },
+  {
+    "name": "Kinera Gramr Pro Earphone Cable With Detachable Boom Mic Modular 3.5mm/4.4mm",
+    "price": 1349000,
+    "urlProduct": "https://www.tokopedia.com/kupingsensi/kinera-gramr-pro-earphone-cable-with-detachable-boom-mic-modular-3-5mm-4-4mm"
   },
   {
     "name": "Kinera Lara 3.5mm Single Ended Pure Copper Gold Plated Upgrade Cable",
@@ -575,11 +575,6 @@
     "urlProduct": "https://www.tokopedia.com/kupingsensi/zhu-audio-qingluan-z4-high-performance-dual-chamber-dynamic-in-ear-earphone"
   },
   {
-    "name": "KZ ZS10 Pro 2 Hybrid Technology 10mm DD + Dual 31736 BA Hybrid Tunable Earphone",
-    "price": 549000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/kz-zs10-pro-2-hybrid-technology-10mm-dd-dual-31736-ba-hybrid-tunable-earphone"
-  },
-  {
     "name": "F.AUDIO DS02 Dual ES9038Q2M Portable DAC Amplifier USB Type C DAC",
     "price": 799000,
     "urlProduct": "https://www.tokopedia.com/kupingsensi/f-audio-ds02-dual-es9038q2m-portable-dac-amplifier-usb-type-c-dac"
@@ -645,21 +640,6 @@
     "urlProduct": "https://www.tokopedia.com/kupingsensi/qkz-x-hbb-hades-dual-9mm-lcp-diaphragm-dynamic-drivers-in-ear-earphone-with-mic-81926"
   },
   {
-    "name": "CCA TRIO In-Ears With 3 Dynamic Drivers In Ear Earphone",
-    "price": 399000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/cca-trio-in-ears-with-3-dynamic-drivers-in-ear-earphone"
-  },
-  {
-    "name": "KZ ZSN PRO 2 1DD/1BA 10mm Super Linear Dynamic Driver In Ear Earphone",
-    "price": 229000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/kz-zsn-pro-2-1dd-1ba-10mm-super-linear-dynamic-driver-in-ear-earphone-gold-mic-27c7b"
-  },
-  {
-    "name": "EPZ Q1 Pro Earphone Wired HIFI Bass Dynamic Driver In Ear Earphone",
-    "price": 419000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/epz-q1-pro-earphone-wired-hifi-bass-dynamic-driver-in-ear-earphone-no-mic-f8484"
-  },
-  {
     "name": "EPZ Q5 Earphone HIFI Ceramic Carbon Nano Moving Coil In Ear Monitor",
     "price": 699000,
     "urlProduct": "https://www.tokopedia.com/kupingsensi/epz-q5-earphone-hifi-ceramic-carbon-nano-moving-coil-in-ear-monitor-white-25867"
@@ -668,16 +648,6 @@
     "name": "JCALLY JM25 Dual Flagship DAC USB Type C to 3.5mm Adapter Converter",
     "price": 279000,
     "urlProduct": "https://www.tokopedia.com/kupingsensi/jcally-jm25-dual-flagship-dac-usb-type-c-to-3-5mm-adapter-converter-light-blue-22c1d"
-  },
-  {
-    "name": "FIIL Belt TWS IPX4 Sport Wireless Bluetooth 5.3 Earphone A.I ENC",
-    "price": 699000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/fiil-belt-tws-ipx4-sport-wireless-bluetooth-5-3-earphone-a-i-enc-white-0d07b"
-  },
-  {
-    "name": "FIIL Key Pro TWS Earphone IPX5 Wireless Bluetooth 5.4 40dB ANC AI Mic",
-    "price": 849000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/fiil-key-pro-tws-earphone-ipx5-wireless-bluetooth-5-4-40db-anc-ai-mic-black-daa40"
   },
   {
     "name": "JCALLY JM10 Pro Hires Lossless DAC CS43131 Type C / Lightning / USB",
