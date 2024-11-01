@@ -42,20 +42,29 @@ jobs:
             echo "Playwright cache directory does not exist."
           fi
 
-      # - name: Install Microsoft Edge (if not cached)
-      #   run: |
-      #     if [ ! -d ~/.cache/ms-playwright/msedge ]; then
-      #       bun playwright install msedge
-      #     fi
-
       - name: Install Playwright browsers (Firefox only if not cached)
         run: |
           if [ ! -d ~/.cache/ms-playwright/firefox ]; then
             bun playwright install firefox
           fi
 
+      - name: Delete products.json
+        run: rm -f products.json
+
+      - name: Download products.json from artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: products-json
+          path: .
+
       - name: Run Playwright tests
         run: bun playwright test
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+      - name: Upload products.json to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: products-json
+          path: products.json

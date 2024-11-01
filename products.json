@@ -130,11 +130,6 @@
     "urlProduct": "https://www.tokopedia.com/csi-zone/philips-taa1708-taa-1708-16mm-driver-bluetooth-open-ear-wireless-headphone-beige-bc424"
   },
   {
-    "name": "Moondrop MOCA 10mm Dynamic Driver Bluetooth True Wireless TWS Earphone",
-    "price": 799000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/moondrop-moca-10mm-dynamic-driver-bluetooth-true-wireless-tws-earphone-gray-2752a"
-  },
-  {
     "name": "Tin HIFI C2 2025 10mm PU+LCP Dynamic Driver In Ear Monitor Earphone With Mic",
     "price": 503200,
     "urlProduct": "https://www.tokopedia.com/csi-zone/tin-hifi-c2-2025-10mm-pu-lcp-dynamic-driver-in-ear-monitor-earphone-with-mic-gun-metal-jack-3-5mm-f15ac"
@@ -206,7 +201,7 @@
   },
   {
     "name": "SoundPEATS Clear 12mm Dynamic Driver Bluetooth True Wireless TWS Earphone",
-    "price": 262200,
+    "price": 285000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/soundpeats-clear-12mm-dynamic-driver-bluetooth-true-wireless-tws-earphone-beige-acbb7"
   },
   {
@@ -243,16 +238,6 @@
     "name": "Tanchjim 4U / For U DMT4 LCP Dynamic Driver In Ear Monitor Earphone",
     "price": 1155000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/tanchjim-4u-for-u-dmt4-lcp-dynamic-driver-in-ear-monitor-earphone"
-  },
-  {
-    "name": "Tangzu x HBB XuanNv / Xuan Nv 2 Dynamic Driver Earphone In Ear Monitor",
-    "price": 1320000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/tangzu-x-hbb-xuannv-xuan-nv-2-dynamic-driver-earphone-in-ear-monitor"
-  },
-  {
-    "name": "Moondrop Golden Ages Planar True Wireless / TWS LDAC In Ear Earphone",
-    "price": 1104150,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/moondrop-golden-ages-planar-true-wireless-tws-ldac-in-ear-earphone"
   },
   {
     "name": "TRN Orca 10mm Dynamic Driver In Ear Monitor Earphone With Microphone",
@@ -296,8 +281,8 @@
   },
   {
     "name": "7Hz / 7 Hertz SONUS 1BA+1DD Hybrid Driver In Ear Monitor Earphone",
-    "price": 768000,
-    "urlProduct": "https://www.tokopedia.com/csi-zone/7hz-7-hertz-sonus-1ba-1dd-hybrid-driver-in-ear-monitor-earphone-red-b6d20"
+    "price": 749000,
+    "urlProduct": "https://www.tokopedia.com/csi-zone/7hz-7-hertz-sonus-1ba-1dd-hybrid-driver-in-ear-monitor-earphone-black-ca5c9"
   },
   {
     "name": "Moondrop Aria 2 / Aria II Ceramic Diaphragm Driver In Ear Monitor",
@@ -386,7 +371,7 @@
   },
   {
     "name": "TruthEar Hexa 1DD + 3BA Hybrid Driver In Ear Monitor Earphone",
-    "price": 1260000,
+    "price": 1088000,
     "urlProduct": "https://www.tokopedia.com/csi-zone/truthear-hexa-1dd-3ba-hybrid-driver-in-ear-monitor-earphone"
   },
   {
@@ -408,6 +393,11 @@
     "name": "Tanchjim Ola 4th Gen DMT Dynamic Driver In Ear Earphone",
     "price": 502200,
     "urlProduct": "https://www.tokopedia.com/csi-zone/tanchjim-ola-4th-gen-dmt-dynamic-driver-in-ear-earphone-with-mic"
+  },
+  {
+    "name": "Tanchjim Tanya 7MM Dynamic Driver Hi-Fi In Ear Earphone",
+    "price": 269000,
+    "urlProduct": "https://www.tokopedia.com/csi-zone/tanchjim-tanya-7mm-dynamic-driver-hi-fi-in-ear-earphone-with-mic"
   },
   {
     "name": "Kiwi Ears Forteza 1BA + 2DD In-Ear Monitor HiFi Earphone",
@@ -645,6 +635,11 @@
     "urlProduct": "https://www.tokopedia.com/kupingsensi/qkz-x-hbb-hades-dual-9mm-lcp-diaphragm-dynamic-drivers-in-ear-earphone-with-mic-81926"
   },
   {
+    "name": "CCA TRIO In-Ears With 3 Dynamic Drivers In Ear Earphone",
+    "price": 399000,
+    "urlProduct": "https://www.tokopedia.com/kupingsensi/cca-trio-in-ears-with-3-dynamic-drivers-in-ear-earphone"
+  },
+  {
     "name": "EPZ Q5 Earphone HIFI Ceramic Carbon Nano Moving Coil In Ear Monitor",
     "price": 699000,
     "urlProduct": "https://www.tokopedia.com/kupingsensi/epz-q5-earphone-hifi-ceramic-carbon-nano-moving-coil-in-ear-monitor-white-25867"
@@ -655,14 +650,9 @@
     "urlProduct": "https://www.tokopedia.com/kupingsensi/jcally-jm25-dual-flagship-dac-usb-type-c-to-3-5mm-adapter-converter-light-blue-22c1d"
   },
   {
-    "name": "7Hz Salnotes Zero Single Driver Earphone alt CHU Tanchjim",
-    "price": 219000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/7hz-salnotes-zero-single-driver-earphone-alt-chu-tanchjim-blue-no-mic-a3770"
-  },
-  {
-    "name": "JCALLY JM10 Pro Hires Lossless DAC CS43131 Type C / Lightning / USB",
-    "price": 399000,
-    "urlProduct": "https://www.tokopedia.com/kupingsensi/jcally-jm10-pro-hires-lossless-dac-cs43131-type-c-lightning-usb-jm10-unit-only-f7254"
+    "name": "FIIL Belt TWS IPX4 Sport Wireless Bluetooth 5.3 Earphone A.I ENC",
+    "price": 699000,
+    "urlProduct": "https://www.tokopedia.com/kupingsensi/fiil-belt-tws-ipx4-sport-wireless-bluetooth-5-3-earphone-a-i-enc-white-0d07b"
   },
   {
     "name": "KZ AZ09 Pro aptX TWS HD Bluetooth Modul KZ DQ6s TRN MT1 Pro CCA CRA+",
