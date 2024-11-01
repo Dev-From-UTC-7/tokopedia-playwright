@@ -1,0 +1,24 @@
+name: Check Artifact
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.1
+
+      - name: Download products.json from artifact
+        id: list
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: *
+
+      - name: Use artifacts
+        run: echo "Available artifacts: ${{ steps.list.outputs.result }}"
