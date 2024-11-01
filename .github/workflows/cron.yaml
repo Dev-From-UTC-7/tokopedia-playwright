@@ -55,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: products-json
-          path: .
+          path: products.json
         continue-on-error: true
 
       - name: Check if products.json exists
