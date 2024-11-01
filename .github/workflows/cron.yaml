@@ -56,6 +56,15 @@ jobs:
         with:
           name: products-json
           path: .
+        continue-on-error: true
+
+      - name: Check if products.json exists
+        id: check_products_json
+        run: |
+          if [ ! -f products.json ]; then
+            echo "products.json does not exist. Creating an empty file."
+            echo "[]" > products.json
+          fi
 
       - name: Run Playwright tests
         run: bun playwright test
