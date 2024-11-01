@@ -17,6 +17,3 @@ jobs:
       - name: Download products.json from artifact
         id: list
         uses: actions/download-artifact@v4.1.8
-
-      - name: Use artifacts
-        run: echo "Available artifacts: ${{ steps.list.outputs.result }}"
