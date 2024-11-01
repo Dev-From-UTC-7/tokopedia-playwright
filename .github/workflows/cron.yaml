@@ -52,7 +52,7 @@ jobs:
         run: rm -f products.json
 
       - name: Download products.json from artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.8
         with:
           name: products-json
           path: .
@@ -73,7 +73,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Upload products.json to artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: products-json
           path: products.json
