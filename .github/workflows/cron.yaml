@@ -48,32 +48,8 @@ jobs:
             bun playwright install firefox
           fi
 
-      - name: Delete products.json
-        run: rm -f products.json
-
-      - name: Download products.json from artifact
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: products-json
-          path: products.json
-        continue-on-error: true
-
-      - name: Check if products.json exists
-        id: check_products_json
-        run: |
-          if [ ! -f products.json ]; then
-            echo "products.json does not exist. Creating an empty file."
-            echo "[]" > products.json
-          fi
-
       - name: Run Playwright tests
         run: bun playwright test
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
-      - name: Upload products.json to artifact
-        uses: actions/upload-artifact@v4.4.3
-        with:
-          name: products-json
-          path: products.json
