@@ -33,8 +33,7 @@ test('tokopedia multi link', async ({ browser }) => {
   const startLinks = [
     'https://www.tokopedia.com/moticc/etalase/in-ear-monitor',
     'https://www.tokopedia.com/csi-zone/etalase/earphone',
-    'https://www.tokopedia.com/yankeeofficial/etalase/kiwi-ears',
-    'https://www.tokopedia.com/yankeeofficial/etalase/simgot',
+    'https://www.tokopedia.com/yankeeofficial/product',
     'https://www.tokopedia.com/kupingsensi/product'
   ];
 
