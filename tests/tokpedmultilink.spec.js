@@ -1,11 +1,24 @@
 require('dotenv').config();
 import { test } from '@playwright/test';
-import fs from 'fs';
+import { createClient } from 'redis';
 import { scrapeProducts } from '../functions/scrapeProducts';
 import { notifyPriceDrops } from '../functions/telegramHelper';
 
+const redisClient = createClient({
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT
+  }
+});
+
+redisClient.on('error', (err) => console.error('Redis Client Error', err));
+
 async function comparePrices(newData, oldData) {
   const priceDrops = [];
+  if (!oldData || !newData) {
+    return priceDrops;
+  }
   newData.forEach((newProduct) => {
     const oldProduct = oldData.find((p) => p.name === newProduct.name);
     if (oldProduct && newProduct.price < oldProduct.price) {
@@ -20,8 +33,18 @@ async function comparePrices(newData, oldData) {
   return priceDrops;
 }
 
-async function saveToJson(data, filename) {
-  fs.writeFileSync(filename, JSON.stringify(data, null, 2));
+
+async function saveToRedis(data, key) {
+  await redisClient.connect();
+  await redisClient.set(key, JSON.stringify(data));
+  await redisClient.disconnect();
+}
+
+async function getFromRedis(key) {
+  await redisClient.connect();
+  const data = await redisClient.get(key);
+  await redisClient.disconnect();
+  return data ? JSON.parse(data) : null;
 }
 
 test('tokopedia multi link', async ({ browser }) => {
@@ -50,9 +73,9 @@ test('tokopedia multi link', async ({ browser }) => {
   });
 
   try {
-    const oldData = JSON.parse(fs.readFileSync('products.json', 'utf-8'));
+    const oldData = await getFromRedis('products');
     const newData = allProducts;
-    saveToJson(newData, 'products.json');
+    await saveToRedis(newData, 'products');
     const priceDrops = await comparePrices(newData, oldData);
     await notifyPriceDrops(priceDrops);
     await context.close();
