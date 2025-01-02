@@ -12,6 +12,7 @@
     "@types/node": "^22.7.7"
   },
   "dependencies": {
+    "better-sqlite3": "^11.7.0",
     "dotenv": "^16.4.5",
     "node-telegram-bot-api": "^0.66.0",
     "redis": "^4.7.0"
