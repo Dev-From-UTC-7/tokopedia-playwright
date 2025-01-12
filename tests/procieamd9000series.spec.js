@@ -3,7 +3,7 @@ import { scrapeProducts } from '../functions/scrapeProducts';
 import Database from 'better-sqlite3';
 
 // Initialize SQLite database
-const db = new Database('products.db');
+const db = new Database('processor.db');
 
 // Create a table for storing product data (if it doesn't exist)
 db.prepare(`
@@ -75,17 +75,15 @@ async function getHistoricalData(productName) {
   `).all(productName);
 }
 
-test('tokopedia using sqlite', async ({ browser }) => {
+test('processor using sqlite', async ({ browser }) => {
   const config = {
     startPrice: 200000,
-    endPrice: 1500000,
+    endPrice: 150000000,
   };
 
   const startLinks = [
-    'https://www.tokopedia.com/moticc/etalase/in-ear-monitor',
-    'https://www.tokopedia.com/csi-zone/etalase/earphone',
-    'https://www.tokopedia.com/yankeeofficial/product',
-    'https://www.tokopedia.com/kupingsensi/product'
+    'https://www.tokopedia.com/cockomputer/etalase/amd-ryzen-9000-series',
+    'https://www.tokopedia.com/enterkomputer/etalase/processor-amd'
   ];
 
   const allProducts = [];
