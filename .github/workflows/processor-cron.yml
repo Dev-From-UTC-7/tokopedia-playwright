@@ -54,9 +54,10 @@ jobs:
         continue-on-error: true
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls
 
       - name: Run processor test
+        id: run-test
         run: bun playwright test tests/procieamd9000series.spec.js
 
       - name: Announce price drops
