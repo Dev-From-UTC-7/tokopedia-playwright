@@ -60,9 +60,8 @@ jobs:
         id: run-test
         run: bun playwright test tests/procieamd9000series.spec.js
 
-      - name: Announce price drops
-        if: steps.run-test.outputs.priceDrops != ''
-        run: echo "::notice::Price Drops Detected: ${{ steps.run-test.outputs.priceDrops }}"
+      - name: Announce important text
+        run: echo "::notice title=Important Announcement::This is an important announcement!"
 
       - name: Upload processor.db as artifact
         uses: actions/upload-artifact@v4.6.0
