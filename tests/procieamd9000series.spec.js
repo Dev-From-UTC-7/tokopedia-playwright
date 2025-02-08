@@ -60,6 +60,10 @@ async function saveToDatabase(data) {
     if (!latestPrice || latestPrice.price !== product.price) {
       insert.run(product.name, product.price, product.urlProduct);
       console.log(`Saved new price for ${product.name}: ${product.price}`);
+      if (product.price < latestPrice.price) {
+        console.info(`[INFO] Price drop detected for ${product.name}:
+          Old price: ${latestPrice.price}, New price: ${product.price}`);
+      }
     } else {
       // console.log(`Skipped duplicate for ${product.name}: ${product.price}`);
     }
@@ -100,9 +104,14 @@ test('processor using sqlite', async ({ browser }) => {
 
   try {
     const newData = allProducts;
-    await saveToDatabase(newData);
     const priceDrops = await comparePrices(newData);
+    await saveToDatabase(newData);
     console.info('Price Drops:', priceDrops);
+
+    if (priceDrops.length > 0) {
+      const priceDropMessage = priceDrops.map(pd => `[${pd.name}](${pd.urlProduct}): from ${pd.oldPrice} to ${pd.newPrice}`).join('\n');
+      console.log(`::set-output name=priceDrops::${priceDropMessage}`);
+    }
 
     await context.close();
   } catch (error) {
