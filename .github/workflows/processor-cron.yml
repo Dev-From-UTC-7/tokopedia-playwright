@@ -51,6 +51,7 @@ jobs:
           name: processor-db
           path: ./
           if-no-files-found: warn
+        continue-on-error: true
 
       - name: Display structure of downloaded files
         run: ls -R
