@@ -59,7 +59,7 @@ jobs:
         run: bun playwright test tests/procieamd9000series.spec.js
 
       - name: Upload processor.db as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.6.0
         with:
           name: processor-db
           path: processor.db
