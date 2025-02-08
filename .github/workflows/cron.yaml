@@ -3,9 +3,9 @@ name: Playwright Tests
 on:
   # schedule:
   #   - cron: "0 * * * *" # Every hour
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
