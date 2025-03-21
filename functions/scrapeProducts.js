@@ -6,7 +6,15 @@ async function scrapeProducts(page, url, config) {
   // Navigate to the URL
   await page.goto(url);
 
-  // Check if product list exists
+  // Ensure the page is fully loaded by waiting for key elements to appear
+  try {
+    await page.waitForSelector('.css-1sn1xa2', { timeout: 3000 }); // Wait up to 30 seconds for the product list
+  } catch (error) {
+    console.warn(`Timeout waiting for product list selector: ${url}`);
+    return products; // Return an empty product array if the selector doesn't appear
+  }
+
+  // Check if product list exists after waiting
   const hasProducts = await page.$('.css-1sn1xa2');
   if (!hasProducts) {
     console.warn(`No products found on page: ${url}`);
