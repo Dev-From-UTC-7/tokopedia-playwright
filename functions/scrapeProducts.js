@@ -1,13 +1,28 @@
 
 async function scrapeProducts(page, url, config) {
   let products = [];
-  await page.goto(url);
-  await waitForSelectorWithTimeout(page, '.css-1sn1xa2', 10000);
   let stockEmptyStatus = false;
+
+  // Navigate to the URL
+  await page.goto(url);
+
+  // Check if product list exists
+  const hasProducts = await page.$('.css-1sn1xa2');
+  if (!hasProducts) {
+    console.warn(`No products found on page: ${url}`);
+    return products; // Return an empty product array if no products are found
+  }
 
   while (true) {
     await scrollToBottom(page);
-    await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
+
+    // Wait for the selector, but handle cases where it might not appear
+    try {
+      await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
+    } catch (error) {
+      console.warn('Product selector not found. Stopping scrape for this page.');
+      break;
+    }
 
     const pageProducts = await page.evaluate((config) => {
       const productElements = document.querySelectorAll('.css-1sn1xa2');
@@ -22,9 +37,10 @@ async function scrapeProducts(page, url, config) {
           const priceText = element.querySelector('[data-testid="linkProductPrice"]').textContent.trim();
           const price = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
           const urlProduct = element.querySelector('.css-gwkf0u').getAttribute('href');
+          const imgLink = element.querySelector('.css-1q90pod')?.getAttribute('src') || 'https://via.placeholder.com/150';
 
           if (price >= config.startPrice && price <= config.endPrice) {
-            products.push({ name, price, urlProduct: cleanUrl(urlProduct) });
+            products.push({ name, price, urlProduct: cleanUrl(urlProduct), imgLink });
           }
         } else {
           stockEmptyStatus = true;
@@ -38,19 +54,26 @@ async function scrapeProducts(page, url, config) {
     stockEmptyStatus = pageProducts.stockEmptyStatus;
 
     if (stockEmptyStatus) {
+      console.warn('Out of stock products identified. Stopping scrape for this page.');
       break;
     }
 
     const nextButton = await page.$('[data-testid="btnShopProductPageNext"]');
-
-    if (nextButton && !stockEmptyStatus) {
-      await navigateToNextPage(page);
+    if (nextButton) {
+      try {
+        await navigateToNextPage(page);
+      } catch (error) {
+        console.error('Error navigating to next page:', error);
+        break;
+      }
     } else {
       break;
     }
   }
+
   return products;
 }
+
 
 async function waitForSelectorWithTimeout(page, selector, timeout) {
   try {
