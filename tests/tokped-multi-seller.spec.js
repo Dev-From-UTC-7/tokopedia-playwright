@@ -30,7 +30,7 @@ const sellerGroups = {
 
 const keyword = process.argv[2];
 const category = process.argv[3]; // 2nd param for category
-const shouldFilter = process.argv[4]; // 2nd param for category
+const shouldFilter = process.argv[4]; // 3rd param true false for forcing filter implementation
 if (!keyword || !category) {
   console.error('Please provide both a search keyword and a seller category.');
   process.exit(1);
