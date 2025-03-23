@@ -1,22 +1,45 @@
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
-import { scrapeProducts } from '../functions/scrapeProducts';
+const { scrapeProducts } = require('../functions/scrapeProducts');
 
-const urls = [
-  'https://www.tokopedia.com/gamingpcstore',
-  'https://www.tokopedia.com/multipro-id',
-  'https://www.tokopedia.com/enterkomputer',
-  'https://www.tokopedia.com/cockomputer',
-  'https://www.tokopedia.com/nanokomputer',
-  'https://www.tokopedia.com/rakitancom',
-  'https://www.tokopedia.com/duniastorage'
-
-];
+// Grouped seller URLs
+const sellerGroups = {
+  computer: [
+    'https://www.tokopedia.com/gamingpcstore',
+    'https://www.tokopedia.com/multipro-id',
+    'https://www.tokopedia.com/enterkomputer',
+    'https://www.tokopedia.com/cockomputer',
+    'https://www.tokopedia.com/nanokomputer',
+    'https://www.tokopedia.com/rakitancom',
+    'https://www.tokopedia.com/duniastorage',
+    'https://www.tokopedia.com/nvidiageforce',
+    'https://www.tokopedia.com/gasol'
+  ],
+  skincare: [
+    'https://www.tokopedia.com/schminkhaus',
+    'https://www.tokopedia.com/nihonmart',
+    'https://www.tokopedia.com/klairsid',
+    'https://www.tokopedia.com/thenakedseries',
+    'https://www.tokopedia.com/beautyhaulindo',
+    'https://www.tokopedia.com/beautyofjoseon',
+    'https://www.tokopedia.com/skin-1004',
+    'https://www.tokopedia.com/venuss8'
+  ],
+};
 
 const keyword = process.argv[2];
-if (!keyword) {
-  console.error('Please provide a search keyword.');
+const category = process.argv[3]; // 2nd param for category
+const shouldFilter = process.argv[4]; // 2nd param for category
+if (!keyword || !category) {
+  console.error('Please provide both a search keyword and a seller category.');
+  process.exit(1);
+}
+
+// Get seller URLs for the specified category
+const urls = sellerGroups[category];
+if (!urls) {
+  console.error(`Invalid category: ${category}. Available categories: ${Object.keys(sellerGroups).join(', ')}`);
   process.exit(1);
 }
 
@@ -30,15 +53,6 @@ const config = {
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
 
-  // const browser = await chromium.launch({
-  //   headless: false,
-  //   args: [`--window-size=${3360},${1890}`], // Set window size to match your screen resolution
-  // });
-
-  // const context = await browser.newContext({
-  //   viewport: { width: 3360, height: 1890 }, // Set viewport size to match your screen resolution
-  // });
-
   const allProducts = [];
 
   // Use Promise.all to run scraping tasks in parallel
@@ -49,12 +63,23 @@ const config = {
 
     try {
       const products = await scrapeProducts(page, searchUrl, config);
-      allProducts.push(...products); // Collect products from each page
+      if (shouldFilter) {
+        // Filter products to ensure they contain the keyword
+        const filteredProducts = products.filter(product =>
+          product.name.toLowerCase().includes(keyword.toLowerCase())
+        );
+
+        allProducts.push(...filteredProducts); // Collect filtered products from each page
+      } else {
+        allProducts.push(...products);
+      }
+
     } catch (error) {
       console.error(`Error scraping ${searchUrl}:`, error);
     } finally {
       await page.close(); // Ensure page is closed after task is done
     }
+
   }));
 
   await browser.close();
@@ -67,7 +92,7 @@ const config = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Results</title>
+    <title>Product Results for ${category}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,7 +127,7 @@ const config = {
     </style>
 </head>
 <body>
-    <h1>Product Results</h1>
+    <h1>Product Results for Category: ${category}</h1>
     <div class="grid-container">
         ${allProducts.map(product => `
             <div class="product-card">
@@ -122,7 +147,18 @@ const config = {
     fs.mkdirSync(resultsDir);
   }
 
-  const filePath = path.join(resultsDir, 'results.html');
+  const filePath = path.join(resultsDir, `results-${category}.html`);
   fs.writeFileSync(filePath, htmlContent);
   console.log(`Results written to ${filePath}`);
+
+  // Open the HTML file in the default browser
+  const { exec } = require('child_process');
+  exec(`open ${filePath}`, (err) => {
+    if (err) {
+      console.error('Failed to open the file in the browser:', err);
+    } else {
+      console.log('Results HTML opened in the browser.');
+    }
+  });
+
 })();
