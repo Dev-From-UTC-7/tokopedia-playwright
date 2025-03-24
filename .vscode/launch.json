@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Tokped Multi Seller",
+      "program": "${workspaceFolder}/tests/tokped-multi-seller.spec.js",
+      "runtimeExecutable": "bun",
+      "args": [
+        "${input:keyword}",
+        "${input:category}",
+        "${input:enableOption}"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "keyword",
+      "type": "promptString",
+      "description": "Enter the keyword to search"
+    },
+    {
+      "id": "category",
+      "type": "pickString",
+      "description": "Select the seller category",
+      "options": ["computer", "skincare"]
+    },
+    {
+      "id": "enableOption",
+      "type": "pickString",
+      "description": "enable strict filter",
+      "options": ["true", "false"]
+    }
+  ]
+}
