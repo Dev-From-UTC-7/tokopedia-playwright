@@ -14,7 +14,18 @@ const sellerGroups = {
     'https://www.tokopedia.com/rakitancom',
     'https://www.tokopedia.com/duniastorage',
     'https://www.tokopedia.com/nvidiageforce',
-    'https://www.tokopedia.com/gasol'
+    'https://www.tokopedia.com/gasol',
+    'https://www.tokopedia.com/tokoexpert',
+    'https://www.tokopedia.com/distributorpc',
+    'https://www.tokopedia.com/imbapc',
+    'https://www.tokopedia.com/tonixcomp',
+    'https://www.tokopedia.com/redteknologi',
+    'https://www.tokopedia.com/jayapc',
+    'https://www.tokopedia.com/amd-component',
+    'https://www.tokopedia.com/it-shoponline',
+    'https://www.tokopedia.com/msi-id',
+    'https://www.tokopedia.com/agreskomputerofficial',
+    'https://www.tokopedia.com/onelinegamepc'
   ],
   skincare: [
     'https://www.tokopedia.com/schminkhaus',
@@ -50,9 +61,13 @@ const config = {
 };
 
 (async () => {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-
+  const browser = await chromium.launch({
+    headless: false,
+    args: ['--disable-blink-features=AutomationControlled']
+  });
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+  });
   const allProducts = [];
 
   // Use Promise.all to run scraping tasks in parallel
