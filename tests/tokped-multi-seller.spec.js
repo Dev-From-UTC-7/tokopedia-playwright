@@ -153,12 +153,36 @@ const config = {
 
   // Open the HTML file in the default browser
   const { exec } = require('child_process');
-  exec(`open ${filePath}`, (err) => {
-    if (err) {
-      console.error('Failed to open the file in the browser:', err);
-    } else {
-      console.log('Results HTML opened in the browser.');
+  const os = require('os');
+  function openHtml(filePath) {
+    const platform = os.platform();
+    let command;
+
+    switch (platform) {
+      case 'win32':
+        command = `start ""`;
+        break;
+      case 'darwin':
+        command = 'open';
+        break;
+      case 'linux':
+        command = 'xdg-open';
+        break;
+      default:
+        console.error('Unsupported platform');
+        return;
     }
-  });
+
+    exec(`${command} "${filePath}"`, (err) => {
+      if (err) {
+        console.error('Failed to open the file in the browser:', err);
+      } else {
+        console.log('Results HTML opened in the browser.');
+      }
+    });
+  }
+
+  // Usage
+  openHtml(filePath);
 
 })();
