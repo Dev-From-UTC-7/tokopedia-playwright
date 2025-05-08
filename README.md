@@ -53,7 +53,7 @@ bun playwright test
 
 The scraper will run automatically on the schedule defined in the `.github/workflows/cron.yaml` file.
 
-## Contributing
+## Contributying
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 

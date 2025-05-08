@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>Multi-Seller Search</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Multi-Seller Product Search</h1>
+
+    <div>
+      <label for="keyword">Search Keyword:</label>
+      <input type="text"
+        id="keyword"
+        placeholder="Enter product keyword">
+    </div>
+
+    <div>
+      <label for="category">Select Category:</label>
+      <select id="category">
+      </select>
+    </div>
+
+    <button onclick="openSellerTabs()">Search in New Tabs</button>
+  </div>
+
+  <script>
+    // Seller groups data (copied from your Playwright script)
+    const sellerGroups = {
+      computer: [
+        'https://www.tokopedia.com/gamingpcstore',
+        'https://www.tokopedia.com/multipro-id',
+        'https://www.tokopedia.com/enterkomputer',
+        'https://www.tokopedia.com/cockomputer',
+        'https://www.tokopedia.com/nanokomputer',
+        'https://www.tokopedia.com/rakitancom',
+        'https://www.tokopedia.com/duniastorage',
+        'https://www.tokopedia.com/nvidiageforce',
+        'https://www.tokopedia.com/gasol',
+        'https://www.tokopedia.com/tokoexpert',
+        'https://www.tokopedia.com/distributorpc',
+        'https://www.tokopedia.com/imbapc',
+        'https://www.tokopedia.com/tonixcomp',
+        'https://www.tokopedia.com/redteknologi',
+        'https://www.tokopedia.com/jayapc',
+        'https://www.tokopedia.com/amd-component',
+        'https://www.tokopedia.com/it-shoponline',
+        'https://www.tokopedia.com/msi-id',
+        'https://www.tokopedia.com/agreskomputerofficial',
+        'https://www.tokopedia.com/onelinegamepc'
+      ],
+      skincare: [
+        'https://www.tokopedia.com/schminkhaus',
+        'https://www.tokopedia.com/nihonmart',
+        'https://www.tokopedia.com/klairsid',
+        'https://www.tokopedia.com/thenakedseries',
+        'https://www.tokopedia.com/beautyhaulindo',
+        'https://www.tokopedia.com/beautyofjoseon',
+        'https://www.tokopedia.com/skin-1004',
+        'https://www.tokopedia.com/venuss8'
+      ],
+      // Add more categories here if needed
+    };
+
+    // Function to populate the category dropdown
+    function populateCategories() {
+      const categorySelect = document.getElementById('category');
+      if (categorySelect) {
+        Object.keys(sellerGroups).forEach(categoryName => {
+          const option = document.createElement('option');
+          option.value = categoryName;
+          option.textContent = categoryName.charAt(0).toUpperCase() + categoryName.slice(1); // Capitalize first letter
+          categorySelect.appendChild(option);
+        });
+      } else {
+        console.error("Category select element not found.");
+      }
+    }
+
+    // Function to open seller tabs
+    function openSellerTabs() {
+      const keywordInput = document.getElementById('keyword');
+      const categorySelect = document.getElementById('category');
+
+      if (!keywordInput || !categorySelect) {
+        alert("Error: Input or select element not found!");
+        return;
+      }
+
+      const keyword = keywordInput.value.trim();
+      const selectedCategory = categorySelect.value;
+
+      if (!keyword) {
+        alert("Please enter a search keyword.");
+        return;
+      }
+
+      if (!selectedCategory || !sellerGroups[selectedCategory]) {
+        alert("Please select a valid category.");
+        return;
+      }
+
+      const baseUrls = sellerGroups[selectedCategory];
+      baseUrls.forEach(baseUrl => {
+        const searchUrl = `${baseUrl}/product?q=${encodeURIComponent(keyword)}`;
+        // Open each URL in a new tab
+        // window.open(searchUrl, '_blank'); // This might be blocked by popup blockers if too many are opened rapidly
+
+        // A slightly more robust way that might have better chances against popup blockers for the first few clicks,
+        // but browsers will still likely block rapid successive calls.
+        // For many URLs, the browser's popup blocker will likely intervene.
+        // This is a browser security feature to prevent malicious sites from opening too many unwanted tabs.
+        try {
+          const newTab = window.open(searchUrl, '_blank');
+          if (newTab) {
+            newTab.focus(); // Optional: bring the new tab to the front
+          } else {
+            // This might happen if the popup was blocked
+            console.warn(`Could not open tab for ${searchUrl}. It might have been blocked by a popup blocker.`);
+            alert(`Opening tab for ${searchUrl} was blocked. Please check your browser's popup blocker settings. You might need to allow popups for this site.`);
+          }
+        } catch (e) {
+          console.error(`Error opening tab for ${searchUrl}:`, e);
+          alert(`An error occurred while trying to open a tab for ${searchUrl}.`);
+        }
+      });
+    }
+
+    // Populate categories when the page loads
+    window.onload = populateCategories;
+  </script>
+
+</body>
+
+</html>
