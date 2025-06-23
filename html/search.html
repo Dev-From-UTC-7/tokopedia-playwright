@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <title>Multi-Seller Search - Material Design</title>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .container {
+      margin-top: 30px;
+      margin-bottom: 30px;
+      /* Added for scroll */
+    }
+
+    .card-panel {
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      /* Reduced margin */
+    }
+
+    h5 {
+      font-size: 1.5rem;
+    }
+
+    .btn,
+    .btn-large,
+    .btn-small,
+    .btn-floating {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    #linksContainer ul {
+      margin-top: 10px;
+    }
+
+    #linksContainer li a {
+      display: block;
+      padding: 8px 0;
+      color: #007bff;
+    }
+
+    #linksContainer li a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-content {
+      padding-bottom: 0;
+      /* Adjust for fixed footer */
+    }
+
+    .modal-footer {
+      padding: 0 24px 20px;
+      /* Adjust padding */
+    }
+
+    .delete-icon {
+      cursor: pointer;
+      color: #f44336;
+      /* Materialize red */
+      vertical-align: middle;
+    }
+
+    .collection-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-field.inline-input {
+      display: inline-block;
+      width: calc(100% - 100px);
+      /* Adjust width as needed */
+      margin-right: 10px;
+    }
+
+    .seller-url-item {
+      padding: 5px;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .seller-url-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card-panel">
+      <h1 class="center-align">Multi-Seller Product Search</h1>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">manage_search</i>
+          <input type="text"
+            id="keyword"
+            placeholder="Enter product keyword">
+          <label for="keyword">Search Keyword:</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">category</i>
+          <select id="category">
+            <option value=""
+              disabled
+              selected>Choose your category</option>
+          </select>
+          <label for="category">Select Category:</label>
+        </div>
+      </div>
+
+      <div class="row center-align"
+        style="margin-top: 20px;">
+        <button class="btn waves-effect waves-light blue darken-2"
+          onclick="openSellerTabs()">
+          Open Searches in New Tabs
+          <i class="material-icons right">open_in_new</i>
+        </button>
+      </div>
+
+      <div class="divider"
+        style="margin: 30px 0;"></div>
+
+      <div class="row center-align">
+        <h5>Manage Seller List</h5>
+        <button class="btn waves-effect waves-light green darken-1 modal-trigger"
+          href="#manageSellersModal">
+          Manage Sellers
+          <i class="material-icons right">settings</i>
+        </button>
+        <button class="btn waves-effect waves-light red darken-1"
+          onclick="resetSellerGroupsToDefault()">
+          Reset to Default
+          <i class="material-icons right">restart_alt</i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manageSellersModal"
+    class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Manage Seller Categories and URLs</h4>
+      <div class="row">
+        <div class="input-field col s9">
+          <input id="newCategoryName"
+            type="text"
+            placeholder="New category name (e.g., electronics)">
+          <label for="newCategoryName">New Category Name</label>
+        </div>
+        <div class="col s3"
+          style="margin-top: 20px;">
+          <button class="btn waves-effect waves-light green"
+            onclick="addCategory()">
+            Add Category
+            <i class="material-icons right">add</i>
+          </button>
+        </div>
+      </div>
+      <div id="sellerManagementArea">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!"
+        class="modal-close waves-effect waves-green btn-flat">Done</a>
+    </div>
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    const SELLER_GROUPS_STORAGE_KEY = 'userSellerGroups';
+    let sellerGroups = {}; // Will be populated from localStorage or defaults
+
+    // Default seller groups (fallback)
+    const defaultSellerGroups = {
+      computer: [
+        'https://www.tokopedia.com/gamingpcstore', 'https://www.tokopedia.com/multipro-id',
+        'https://www.tokopedia.com/enterkomputer', 'https://www.tokopedia.com/cockomputer',
+      ],
+      skincare: [
+        'https://www.tokopedia.com/schminkhaus', 'https://www.tokopedia.com/nihonmart',
+      ]
+    };
+
+    function loadSellerGroups() {
+      const storedGroups = localStorage.getItem(SELLER_GROUPS_STORAGE_KEY);
+      if (storedGroups) {
+        try {
+          const parsedGroups = JSON.parse(storedGroups);
+          // Basic validation: check if it's an object
+          if (parsedGroups && typeof parsedGroups === 'object' && !Array.isArray(parsedGroups)) {
+            sellerGroups = parsedGroups;
+          } else {
+            console.warn("Stored seller groups format is invalid. Using defaults.");
+            sellerGroups = JSON.parse(JSON.stringify(defaultSellerGroups)); // Deep copy
+          }
+        } catch (e) {
+          console.error("Error parsing seller groups from localStorage:", e);
+          sellerGroups = JSON.parse(JSON.stringify(defaultSellerGroups)); // Deep copy on error
+        }
+      } else {
+        // No groups in localStorage, use defaults
+        sellerGroups = JSON.parse(JSON.stringify(defaultSellerGroups)); // Deep copy
+      }
+      // Ensure defaults are saved if nothing was loaded or if loaded data was bad
+      // This happens implicitly if we save after every modification.
+      // Or explicitly save defaults if nothing was found:
+      if (!storedGroups) {
+        saveSellerGroups();
+      }
+    }
+
+    function saveSellerGroups() {
+      try {
+        localStorage.setItem(SELLER_GROUPS_STORAGE_KEY, JSON.stringify(sellerGroups));
+        M.toast({ html: 'Seller list saved!', classes: 'green lighten-1' });
+      } catch (e) {
+        console.error("Error saving seller groups to localStorage:", e);
+        M.toast({ html: 'Error saving seller list. Storage might be full.', classes: 'red' });
+      }
+    }
+
+    function resetSellerGroupsToDefault() {
+      if (confirm("Are you sure you want to reset all sellers to the default list? This cannot be undone.")) {
+        sellerGroups = JSON.parse(JSON.stringify(defaultSellerGroups)); // Deep copy
+        saveSellerGroups();
+        populateCategories(); // Repopulate the main dropdown
+        renderSellerManagementUI(); // Repopulate the management UI
+        M.toast({ html: 'Seller list has been reset to default.', classes: 'green' });
+      }
+    }
+
+    function populateCategories() {
+      const categorySelect = document.getElementById('category');
+      if (categorySelect) {
+        const currentSelectedValue = categorySelect.value; // Preserve selection if possible
+        while (categorySelect.options.length > 1) { // Keep the "Choose" option
+          categorySelect.remove(1);
+        }
+        Object.keys(sellerGroups).sort().forEach(categoryName => {
+          const option = document.createElement('option');
+          option.value = categoryName;
+          option.textContent = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+          categorySelect.appendChild(option);
+        });
+
+        // Try to restore selection
+        if (Object.keys(sellerGroups).includes(currentSelectedValue)) {
+          categorySelect.value = currentSelectedValue;
+        } else if (Object.keys(sellerGroups).length > 0) {
+          // If previous selection invalid, select first available (or keep "Choose")
+          // categorySelect.value = Object.keys(sellerGroups).sort()[0];
+        }
+
+        M.FormSelect.init(categorySelect); // Re-initialize Materialize select
+      } else {
+        console.error("Category select element not found.");
+      }
+    }
+
+    function renderSellerManagementUI() {
+      const managementArea = document.getElementById('sellerManagementArea');
+      managementArea.innerHTML = ''; // Clear previous content
+
+      if (Object.keys(sellerGroups).length === 0) {
+        managementArea.innerHTML = '<p>No categories defined yet. Add one above.</p>';
+        return;
+      }
+
+      Object.keys(sellerGroups).sort().forEach(categoryName => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'card';
+        categoryCard.innerHTML = `
+                    <div class="card-content">
+                        <span class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                            ${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}
+                            <i class="material-icons delete-icon" onclick="deleteCategory('${categoryName}')" title="Delete Category">delete_forever</i>
+                        </span>
+                        <ul class="collection" id="urls-${categoryName}">
+                            ${sellerGroups[categoryName].map(url => `
+                                <li class="collection-item seller-url-item">
+                                    <span>${url}</span>
+                                    <i class="material-icons delete-icon" onclick="deleteSellerUrl('${categoryName}', '${url}')" title="Delete URL">remove_circle_outline</i>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <div class="row" style="margin-top:15px;">
+                            <div class="input-field col s9">
+                                <input type="url" id="newUrl-${categoryName}" placeholder="https://www.store.com/seller" class="validate">
+                                <label for="newUrl-${categoryName}">New Seller URL</label>
+                            </div>
+                            <div class="col s3" style="margin-top:20px;">
+                                <button class="btn-small waves-effect waves-light green" onclick="addSellerUrl('${categoryName}')">
+                                    Add URL <i class="material-icons right tiny">add</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        managementArea.appendChild(categoryCard);
+      });
+      M.updateTextFields(); // Re-initialize labels for dynamically added inputs
+    }
+
+    function addCategory() {
+      const newCategoryNameInput = document.getElementById('newCategoryName');
+      const categoryName = newCategoryNameInput.value.trim().toLowerCase();
+      if (categoryName) {
+        if (!sellerGroups[categoryName]) {
+          sellerGroups[categoryName] = [];
+          saveSellerGroups();
+          populateCategories();
+          renderSellerManagementUI();
+          newCategoryNameInput.value = ''; // Clear input
+          M.toast({ html: `Category '${categoryName}' added!`, classes: 'green' });
+        } else {
+          M.toast({ html: `Category '${categoryName}' already exists.`, classes: 'orange' });
+        }
+      } else {
+        M.toast({ html: 'Please enter a category name.', classes: 'orange' });
+      }
+    }
+
+    function deleteCategory(categoryName) {
+      if (confirm(`Are you sure you want to delete the category "${categoryName}" and all its sellers?`)) {
+        delete sellerGroups[categoryName];
+        saveSellerGroups();
+        populateCategories();
+        renderSellerManagementUI();
+        M.toast({ html: `Category '${categoryName}' deleted.`, classes: 'green' });
+      }
+    }
+
+    function addSellerUrl(categoryName) {
+      const newUrlInput = document.getElementById(`newUrl-${categoryName}`);
+      let url = newUrlInput.value.trim();
+      if (url) {
+        // Basic URL validation (simple check for http/https)
+        if (!url.toLowerCase().startsWith('http://') && !url.toLowerCase().startsWith('https://')) {
+          M.toast({ html: 'Please enter a valid URL starting with http:// or https://', classes: 'orange' });
+          return;
+        }
+        try {
+          new URL(url); // More robust validation
+        } catch (_) {
+          M.toast({ html: 'Invalid URL format.', classes: 'orange' });
+          return;
+        }
+
+        if (!sellerGroups[categoryName].includes(url)) {
+          sellerGroups[categoryName].push(url);
+          saveSellerGroups();
+          renderSellerManagementUI(); // Just re-render this section
+          newUrlInput.value = ''; // Clear input
+          M.toast({ html: 'Seller URL added!', classes: 'green' });
+        } else {
+          M.toast({ html: 'This URL already exists in this category.', classes: 'orange' });
+        }
+      } else {
+        M.toast({ html: 'Please enter a seller URL.', classes: 'orange' });
+      }
+    }
+
+    function deleteSellerUrl(categoryName, url) {
+      // No confirmation needed for single URL deletion, or add one if preferred
+      const index = sellerGroups[categoryName].indexOf(url);
+      if (index > -1) {
+        sellerGroups[categoryName].splice(index, 1);
+        saveSellerGroups();
+        renderSellerManagementUI();
+        M.toast({ html: 'Seller URL removed.', classes: 'green' });
+      }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      loadSellerGroups(); // Load first
+      populateCategories(); // Then populate dropdowns
+      M.AutoInit(); // Initialize all Materialize components (including modals)
+
+      // Add event listener for when the modal is opened to render its content
+      var modalElem = document.getElementById('manageSellersModal');
+      var modalInstance = M.Modal.getInstance(modalElem);
+      // For older Materialize versions, it might be modalInstance.options.onOpenStart
+      if (modalInstance) {
+        const originalOpen = modalInstance.open;
+        modalInstance.open = function () {
+          renderSellerManagementUI();
+          if (originalOpen) originalOpen.apply(this, arguments);
+          M.updateTextFields(); // Ensure labels are active for dynamic content
+        };
+      }
+    });
+
+    function getKeywordAndCategory() {
+      const keywordInput = document.getElementById('keyword');
+      const categorySelect = document.getElementById('category');
+      if (!keywordInput || !categorySelect) {
+        M.toast({ html: 'Error: Input or select element not found!', classes: 'red' });
+        return null;
+      }
+      const keyword = keywordInput.value.trim();
+      const selectedCategoryValue = categorySelect.value;
+
+      if (!keyword) {
+        M.toast({ html: 'Please enter a search keyword.', classes: 'orange' });
+        return null;
+      }
+      if (!selectedCategoryValue || !sellerGroups[selectedCategoryValue]) {
+        M.toast({ html: 'Please select a valid category.', classes: 'orange' });
+        return null;
+      }
+      return { keyword, selectedCategory: selectedCategoryValue, baseUrls: sellerGroups[selectedCategoryValue] };
+    }
+
+    function openSellerTabs() {
+      const searchData = getKeywordAndCategory();
+      if (!searchData) return;
+      const { keyword, baseUrls } = searchData;
+      let openedCount = 0;
+      baseUrls.forEach(baseUrl => {
+        const searchUrl = `${baseUrl}/product?q=${encodeURIComponent(keyword)}`;
+        try {
+          const newTab = window.open(searchUrl, '_blank');
+          if (newTab) {
+            newTab.focus();
+            openedCount++;
+          } else {
+            console.warn(`Could not open tab for ${searchUrl}. It might have been blocked.`);
+            M.toast({ html: `Popup blocked for ${baseUrl}. Check browser settings.`, classes: 'red lighten-1', displayLength: 5000 });
+          }
+        } catch (e) {
+          console.error(`Error opening tab for ${searchUrl}:`, e);
+          M.toast({ html: `Error opening tab for ${baseUrl}.`, classes: 'red lighten-1' });
+        }
+      });
+      if (openedCount > 0) {
+        M.toast({ html: `${openedCount} search tabs initiated.`, classes: 'blue lighten-1' });
+      }
+    }
+  </script>
+</body>
+
+</html>
