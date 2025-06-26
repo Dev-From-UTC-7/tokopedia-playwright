@@ -6,26 +6,26 @@ const { scrapeProducts } = require('../functions/scrapeProducts');
 // Grouped seller URLs
 const sellerGroups = {
   computer: [
-    'https://www.tokopedia.com/gamingpcstore',
-    'https://www.tokopedia.com/multipro-id',
+    // 'https://www.tokopedia.com/gamingpcstore',
+    // 'https://www.tokopedia.com/multipro-id',
     'https://www.tokopedia.com/enterkomputer',
-    'https://www.tokopedia.com/cockomputer',
-    'https://www.tokopedia.com/nanokomputer',
-    'https://www.tokopedia.com/rakitancom',
-    'https://www.tokopedia.com/duniastorage',
-    'https://www.tokopedia.com/nvidiageforce',
-    'https://www.tokopedia.com/gasol',
-    'https://www.tokopedia.com/tokoexpert',
-    'https://www.tokopedia.com/distributorpc',
-    'https://www.tokopedia.com/imbapc',
-    'https://www.tokopedia.com/tonixcomp',
-    'https://www.tokopedia.com/redteknologi',
-    'https://www.tokopedia.com/jayapc',
-    'https://www.tokopedia.com/amd-component',
-    'https://www.tokopedia.com/it-shoponline',
-    'https://www.tokopedia.com/msi-id',
-    'https://www.tokopedia.com/agreskomputerofficial',
-    'https://www.tokopedia.com/onelinegamepc'
+    // 'https://www.tokopedia.com/cockomputer',
+    // 'https://www.tokopedia.com/nanokomputer',
+    // 'https://www.tokopedia.com/rakitancom',
+    // 'https://www.tokopedia.com/duniastorage',
+    // 'https://www.tokopedia.com/nvidiageforce',
+    // 'https://www.tokopedia.com/gasol',
+    // 'https://www.tokopedia.com/tokoexpert',
+    // 'https://www.tokopedia.com/distributorpc',
+    // 'https://www.tokopedia.com/imbapc',
+    // 'https://www.tokopedia.com/tonixcomp',
+    // 'https://www.tokopedia.com/redteknologi',
+    // 'https://www.tokopedia.com/jayapc',
+    // 'https://www.tokopedia.com/amd-component',
+    // 'https://www.tokopedia.com/it-shoponline',
+    // 'https://www.tokopedia.com/msi-id',
+    // 'https://www.tokopedia.com/agreskomputerofficial',
+    // 'https://www.tokopedia.com/onelinegamepc'
   ],
   skincare: [
     'https://www.tokopedia.com/schminkhaus',
@@ -97,7 +97,7 @@ const config = {
 
   }));
 
-  await browser.close();
+  // await browser.close();
 
   allProducts.sort((a, b) => a.price - b.price);
   // Generate HTML result

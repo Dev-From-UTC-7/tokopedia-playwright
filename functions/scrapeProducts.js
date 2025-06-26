@@ -8,14 +8,14 @@ async function scrapeProducts(page, url, config) {
 
   // Ensure the page is fully loaded by waiting for key elements to appear
   try {
-    await page.waitForSelector('.css-1sn1xa2', { timeout: 3000 }); // Wait up to 30 seconds for the product list
+    await page.waitForSelector('.css-79elbk', { timeout: 3000 }); // Wait up to 30 seconds for the product list
   } catch (error) {
     console.warn(`Timeout waiting for product list selector: ${url}`);
     return products; // Return an empty product array if the selector doesn't appear
   }
 
   // Check if product list exists after waiting
-  const hasProducts = await page.$('.css-1sn1xa2');
+  const hasProducts = await page.$('.css-79elbk');
   if (!hasProducts) {
     console.warn(`No products found on page: ${url}`);
     return products; // Return an empty product array if no products are found
@@ -26,29 +26,43 @@ async function scrapeProducts(page, url, config) {
 
     // Wait for the selector, but handle cases where it might not appear
     try {
-      await waitForSelectorWithTimeout(page, '.prd_link-product-price', 10000);
+      await waitForSelectorWithTimeout(page, '.css-79elbk', 10000);
     } catch (error) {
       console.warn('Product selector not found. Stopping scrape for this page.');
       break;
     }
 
     const pageProducts = await page.evaluate((config) => {
-      const productElements = document.querySelectorAll('.css-1sn1xa2');
+      const productElements = document.querySelectorAll('.css-79elbk');
       const products = [];
       let stockEmptyStatus = false;
+      console.log(productElements)
 
       productElements.forEach((element) => {
         const cleanUrl = (url) => new URL(url).origin + new URL(url).pathname;
-        const emptyStockIdentifier = element.querySelector('.css-szwojr');
-        if (emptyStockIdentifier == null) {
-          const name = element.querySelector('[data-testid="linkProductName"]').textContent.trim();
-          const priceText = element.querySelector('[data-testid="linkProductPrice"]').textContent.trim();
-          const price = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
-          const urlProduct = element.querySelector('.css-gwkf0u').getAttribute('href');
-          const imgLink = element.querySelector('.css-1q90pod')?.getAttribute('src') || 'https://via.placeholder.com/150';
 
-          if (price >= config.startPrice && price <= config.endPrice) {
-            products.push({ name, price, urlProduct: cleanUrl(urlProduct), imgLink });
+        // You must verify this selector by inspecting an "Out of Stock" product.
+        const emptyStockIdentifier = element.querySelector('.some-out-of-stock-class');
+
+        if (emptyStockIdentifier == null) {
+          // Robust: Targets the main link wrapper for the product URL.
+          const urlProduct = element.querySelector('a')?.getAttribute('href');
+
+          // Robust: Uses the 'alt' attribute of the image, which is very stable.
+          const imgLink = element.querySelector('img[alt="product-image"]')?.getAttribute('src') || 'https://via.placeholder.com/150';
+
+          // CORRECTED: Using an attribute selector to handle special characters.
+          const name = element.querySelector('span[class="_0T8-iGxMpV6NEsYEhwkqEg=="]')?.textContent.trim();
+
+          // CORRECTED: Using an attribute selector here as well.
+          const priceText = element.querySelector('div[class="_67d6E1xDKIzw+i2D2L0tjw=="]')?.textContent.trim();
+
+          // The rest of your logic remains the same.
+          if (name && priceText && urlProduct) {
+            const price = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
+            if (price >= config.startPrice && price <= config.endPrice) {
+              products.push({ name, price, urlProduct: cleanUrl(urlProduct), imgLink });
+            }
           }
         } else {
           stockEmptyStatus = true;
@@ -112,7 +126,7 @@ async function navigateToNextPage(page) {
   const maxRetries = 5; // Maximum number of retries
   const initialTimeout = 15000; // Initial timeout in milliseconds
   const timeoutIncrement = 5000; // Increment timeout by this amount on each retry
-  const contentLoadedSelector = '.css-1sn1xa2'; // Selector indicating content is loaded
+  const contentLoadedSelector = '.css-79elbk'; // Selector indicating content is loaded
 
   let currentTimeout = initialTimeout;
   let retryCount = 0;
