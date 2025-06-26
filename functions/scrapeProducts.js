@@ -51,11 +51,11 @@ async function scrapeProducts(page, url, config) {
           // Robust: Uses the 'alt' attribute of the image, which is very stable.
           const imgLink = element.querySelector('img[alt="product-image"]')?.getAttribute('src') || 'https://via.placeholder.com/150';
 
-          // CORRECTED: Using an attribute selector to handle special characters.
-          const name = element.querySelector('span[class="_0T8-iGxMpV6NEsYEhwkqEg=="]')?.textContent.trim();
+          // Using 'contains' attribute selector for robustness against dynamic class changes.
+          const name = element.querySelector('span[class*="_0T8-iGxMpV6NEsYEhwkqEg=="]')?.textContent.trim();
 
-          // CORRECTED: Using an attribute selector here as well.
-          const priceText = element.querySelector('div[class="_67d6E1xDKIzw+i2D2L0tjw=="]')?.textContent.trim();
+          // Using 'contains' attribute selector for robustness against dynamic class changes.
+          const priceText = element.querySelector('div[class*="_67d6E1xDKIzw+i2D2L0tjw=="]')?.textContent.trim();
 
           // The rest of your logic remains the same.
           if (name && priceText && urlProduct) {
