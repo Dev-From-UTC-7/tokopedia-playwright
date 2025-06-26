@@ -63,10 +63,11 @@ const config = {
 (async () => {
   const browser = await chromium.launch({
     headless: false,
-    args: ['--disable-blink-features=AutomationControlled']
+    args: ['--disable-blink-features=AutomationControlled', '--start-maximized']
   });
   const context = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+    viewport: null // This will make the browser use the full available screen size
   });
   const allProducts = [];
 
@@ -97,7 +98,7 @@ const config = {
 
   }));
 
-  // await browser.close();
+  await browser.close();
 
   allProducts.sort((a, b) => a.price - b.price);
   // Generate HTML result
