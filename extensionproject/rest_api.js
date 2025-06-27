@@ -24,9 +24,7 @@ Bun.serve({
 
         const timestamp = new Date().toISOString()
         const newData = { url: postUrl, price, timestamp, productName }
-        // Manually stringify the object for storage
         await redis.rpush(key, JSON.stringify(newData))
-
         return new Response('Data appended to Redis list', { status: 200 })
       } catch (error) {
         console.error(error)

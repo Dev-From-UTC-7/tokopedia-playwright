@@ -5,8 +5,13 @@
   <style>
     body {
       font-family: sans-serif;
-      width: 200px;
+      width: 300px;
       padding: 10px;
+    }
+    #key-input {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
     }
     button {
       width: 100%;
@@ -19,11 +24,38 @@
     button:hover {
       background-color: #45a049;
     }
+    #results-container {
+      margin-top: 10px;
+    }
+    .result-row {
+      padding: 8px 5px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-name {
+        font-size: 0.9em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 10px;
+    }
+    .product-price {
+        font-weight: bold;
+        color: #d9534f;
+        white-space: nowrap;
+    }
   </style>
 </head>
 <body>
-  <button id="scrapeBtn">Scrape Product</button>
+  <input type="text" id="key-input" placeholder="Enter key...">
+  <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+    <button id="fetchBtn" style="flex-grow: 1;">Fetch Data</button>
+    <button id="scrapeBtn" style="flex-grow: 1;">Scrape Product</button>
+  </div>
   <p id="status" style="margin-top: 10px; font-size: 0.9em;"></p>
+  <div id="results-container"></div>
   <script src="popup.js"></script>
 </body>
 </html>
