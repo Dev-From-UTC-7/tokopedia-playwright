@@ -1,45 +1,66 @@
 import { Redis } from '@upstash/redis'
-import express from 'express'
+
 const redis = Redis.fromEnv()
 
-const app = express()
-app.use(express.json())
+console.log('Starting Bun server...')
 
-app.post('/', async (req, res) => {
-  const { key, price, url } = req.body
+Bun.serve({
+  port: 3000,
+  async fetch(req) {
+    const url = new URL(req.url)
 
-  if (!key || !price || !url) {
-    return res.status(400).send('Missing required fields: key, price, and url are required.')
-  }
+    // Handle POST requests to add data
+    if (url.pathname === '/' && req.method === 'POST') {
+      try {
+        const body = await req.json()
+        const { key, price, url: postUrl } = body
 
-  try {
-    const timestamp = new Date().toISOString()
-    const newData = { url, price, timestamp }
-    await redis.rpush(key, newData)
-    res.status(200).send('Data appended to Redis list')
-  } catch (error) {
+        if (!key || !price || !postUrl) {
+          return new Response(
+            'Missing required fields: key, price, and url are required.',
+            { status: 400 }
+          )
+        }
+
+        const timestamp = new Date().toISOString()
+        const newData = { url: postUrl, price, timestamp }
+        await redis.rpush(key, newData)
+
+        return new Response('Data appended to Redis list', { status: 200 })
+      } catch (error) {
+        console.error(error)
+        if (error instanceof SyntaxError) {
+          return new Response('Invalid JSON body', { status: 400 })
+        }
+        return new Response('Error saving data to Redis', { status: 500 })
+      }
+    }
+
+    // Handle GET requests to retrieve data
+    if (req.method === 'GET' && url.pathname.length > 1) {
+      const key = url.pathname.substring(1) // Remove leading '/'
+
+      try {
+        const data = await redis.lrange(key, 0, -1)
+        return new Response(JSON.stringify(data), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 200,
+        })
+      } catch (error) {
+        console.error(error)
+        return new Response('Error retrieving data from Redis', {
+          status: 500,
+        })
+      }
+    }
+
+    // Handle not found cases
+    return new Response('Not Found', { status: 404 })
+  },
+  error(error) {
     console.error(error)
-    res.status(500).send('Error saving data to Redis')
-  }
+    return new Response('An unexpected error occurred', { status: 500 })
+  },
 })
 
-app.get('/:key', async (req, res) => {
-  const { key } = req.params
-
-  if (!key) {
-    return res.status(400).send('Missing key in path')
-  }
-
-  try {
-    const data = await redis.lrange(key, 0, -1)
-    res.status(200).json(data)
-  } catch (error) {
-    console.error(error)
-    res.status(500).send('Error retrieving data from Redis')
-  }
-})
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
-})
-
+console.log('Bun server running on port 3000')
