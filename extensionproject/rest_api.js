@@ -13,18 +13,19 @@ Bun.serve({
     if (url.pathname === '/' && req.method === 'POST') {
       try {
         const body = await req.json()
-        const { key, price, url: postUrl } = body
+        const { key, price, url: postUrl, productName } = body
 
-        if (!key || !price || !postUrl) {
+        if (!key || !price || !postUrl || !productName) {
           return new Response(
-            'Missing required fields: key, price, and url are required.',
+            'Missing required fields: key, price, url, and productName are required.',
             { status: 400 }
           )
         }
 
         const timestamp = new Date().toISOString()
-        const newData = { url: postUrl, price, timestamp }
-        await redis.rpush(key, newData)
+        const newData = { url: postUrl, price, timestamp, productName }
+        // Manually stringify the object for storage
+        await redis.rpush(key, JSON.stringify(newData))
 
         return new Response('Data appended to Redis list', { status: 200 })
       } catch (error) {
