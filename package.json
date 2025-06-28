@@ -16,6 +16,7 @@
     "better-sqlite3": "^11.7.0",
     "dotenv": "^16.4.5",
     "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
     "node-telegram-bot-api": "^0.66.0",
     "redis": "^5.5.6"
   }
