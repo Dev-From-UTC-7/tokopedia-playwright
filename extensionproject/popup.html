@@ -7,6 +7,8 @@
       font-family: sans-serif;
       width: 300px;
       padding: 10px;
+      position: relative; /* For positioning the clear button */
+      padding-bottom: 50px; /* Space for the fixed clear button */
     }
     #key-input {
       width: calc(100% - 22px);
@@ -20,12 +22,15 @@
       background-color: #4CAF50;
       color: white;
       cursor: pointer;
+      border-radius: 4px;
     }
     button:hover {
       background-color: #45a049;
     }
     #results-container {
       margin-top: 10px;
+      max-height: 200px; /* Limit height for scrollable results */
+      overflow-y: auto; /* Enable scrolling */
     }
     .result-row {
       padding: 8px 5px;
@@ -46,6 +51,35 @@
         color: #d9534f;
         white-space: nowrap;
     }
+    #clear-button-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+      background-color: #f8f8f8; /* Match body background */
+      border-top: 1px solid #eee;
+    }
+    #clearBtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f44336;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+    }
+    #clearBtn:hover {
+      background-color: #d32f2f;
+    }
+    #clearBtn svg {
+      fill: white;
+      width: 20px;
+      height: 20px;
+    }
   </style>
 </head>
 <body>
@@ -56,6 +90,14 @@
   </div>
   <p id="status" style="margin-top: 10px; font-size: 0.9em;"></p>
   <div id="results-container"></div>
+
+  <div id="clear-button-container">
+    <button id="clearBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+      </svg>
+    </button>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>

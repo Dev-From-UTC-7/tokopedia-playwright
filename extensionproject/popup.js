@@ -1,22 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const fetchBtn = document.getElementById('fetchBtn');
   const scrapeBtn = document.getElementById('scrapeBtn');
+  const clearBtn = document.getElementById('clearBtn');
   const keyInput = document.getElementById('key-input');
   const statusParagraph = document.getElementById('status');
   const resultsContainer = document.getElementById('results-container');
 
-  // Load saved key
-  chrome.storage.local.get(['savedKey'], (result) => {
-    if (result.savedKey) {
-      keyInput.value = result.savedKey;
-    }
-  });
-
-  keyInput.addEventListener('input', () => {
-    chrome.storage.local.set({ savedKey: keyInput.value });
-  });
-
-  fetchBtn.addEventListener('click', () => {
+  // Function to fetch and display data
+  const fetchDataAndDisplay = () => {
     const key = keyInput.value.trim();
     if (key) {
       resultsContainer.innerHTML = 'Loading...';
@@ -50,16 +41,62 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('Error fetching data:', error);
           resultsContainer.textContent = 'Error fetching data.';
         });
+    } else {
+      resultsContainer.textContent = 'Enter a key to fetch data.';
+    }
+  };
+
+  // Load saved key and fetch data
+  chrome.storage.local.get(['savedKey'], (result) => {
+    if (result.savedKey) {
+      keyInput.value = result.savedKey;
+      fetchDataAndDisplay(); // Fetch data on load
     }
   });
 
+  keyInput.addEventListener('input', () => {
+    chrome.storage.local.set({ savedKey: keyInput.value });
+    fetchDataAndDisplay(); // Fetch data when key changes
+  });
+
+  fetchBtn.addEventListener('click', fetchDataAndDisplay); // Keep existing fetch button functionality
+
   scrapeBtn.addEventListener('click', () => {
+    const key = keyInput.value.trim();
+    if (!key) {
+      statusParagraph.textContent = 'Please enter a key before scraping.';
+      statusParagraph.style.color = 'orange';
+      return;
+    }
+
     statusParagraph.textContent = 'Scraping...';
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { action: 'scrapeProduct' }, (response) => {
-        if (response && response.status === 'success') {
-          statusParagraph.textContent = 'Product data sent!';
-          statusParagraph.style.color = 'green';
+        if (response && response.status === 'success' && response.data) {
+          const productData = response.data;
+          // Now send this data to your backend
+          fetch('http://localhost:3000/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ key, ...productData }),
+          })
+            .then(postResponse => {
+              if (postResponse.ok) {
+                statusParagraph.textContent = 'Product data sent and saved!';
+                statusParagraph.style.color = 'green';
+                fetchDataAndDisplay(); // Refetch data after successful save
+              } else {
+                statusParagraph.textContent = 'Failed to save product data.';
+                statusParagraph.style.color = 'red';
+              }
+            })
+            .catch(error => {
+              console.error('Error sending data to backend:', error);
+              statusParagraph.textContent = 'Error sending data to backend.';
+              statusParagraph.style.color = 'red';
+            });
         } else if (response && response.status === 'error') {
           statusParagraph.textContent = `Error: ${response.message}`;
           statusParagraph.style.color = 'red';
@@ -69,5 +106,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  });
+
+  clearBtn.addEventListener('click', () => {
+    const key = keyInput.value.trim();
+    if (key) {
+      statusParagraph.textContent = 'Clearing data...';
+      fetch(`http://localhost:3000/clear/${key}`, {
+        method: 'DELETE',
+      })
+        .then(response => {
+          if (response.ok) {
+            statusParagraph.textContent = 'Data cleared successfully!';
+            statusParagraph.style.color = 'green';
+            resultsContainer.innerHTML = ''; // Clear displayed results
+          } else {
+            statusParagraph.textContent = 'Failed to clear data.';
+            statusParagraph.style.color = 'red';
+          }
+        })
+        .catch(error => {
+          console.error('Error clearing data:', error);
+          statusParagraph.textContent = 'Error clearing data.';
+          statusParagraph.style.color = 'red';
+        });
+    } else {
+      statusParagraph.textContent = 'Please enter a key to clear data.';
+      statusParagraph.style.color = 'orange';
+    }
   });
 });

@@ -44,6 +44,19 @@ app.get('/:key', async (req, res) => {
   }
 });
 
+// Handle DELETE requests to clear data
+app.delete('/clear/:key', async (req, res) => {
+  const key = req.params.key;
+
+  try {
+    await redis.del(key);
+    return res.status(200).send(`Data for key '${key}' cleared successfully.`);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Error clearing data from Redis');
+  }
+});
+
 // Handle not found cases (for any other routes)
 app.use((req, res) => {
   res.status(404).send('Not Found');

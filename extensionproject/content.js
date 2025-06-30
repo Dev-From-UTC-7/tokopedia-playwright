@@ -23,7 +23,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     };
 
     if (productData.price !== null && productData.productName !== null) {
-      chrome.runtime.sendMessage({ action: 'sendData', data: productData });
       sendResponse({ status: "success", data: productData });
     } else {
       sendResponse({ status: "error", message: "Price or product name element not found." });
