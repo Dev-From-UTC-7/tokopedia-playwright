@@ -3,15 +3,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const scrapeBtn = document.getElementById('scrapeBtn');
   const clearBtn = document.getElementById('clearBtn');
   const keyInput = document.getElementById('key-input');
+  const apiKeyInput = document.getElementById('api-key-input');
   const statusParagraph = document.getElementById('status');
   const resultsContainer = document.getElementById('results-container');
 
   // Function to fetch and display data
   const fetchDataAndDisplay = () => {
     const key = keyInput.value.trim();
-    if (key) {
+    const apiKey = apiKeyInput.value.trim();
+    if (key && apiKey) {
       resultsContainer.innerHTML = 'Loading...';
-      fetch(`http://localhost:3000/${key}`)
+      fetch(`http://localhost:3000/${key}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        }
+      })
         .then(response => response.json())
         .then(data => {
           resultsContainer.innerHTML = '';
@@ -42,16 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
           resultsContainer.textContent = 'Error fetching data.';
         });
     } else {
-      resultsContainer.textContent = 'Enter a key to fetch data.';
+      resultsContainer.textContent = 'Enter a key and API key to fetch data.';
     }
   };
 
   // Load saved key and fetch data
-  chrome.storage.local.get(['savedKey'], (result) => {
+  chrome.storage.local.get(['savedKey', 'apiKey'], (result) => {
     if (result.savedKey) {
       keyInput.value = result.savedKey;
-      fetchDataAndDisplay(); // Fetch data on load
     }
+    if (result.apiKey) {
+      apiKeyInput.value = result.apiKey;
+    }
+    fetchDataAndDisplay(); // Fetch data on load
   });
 
   keyInput.addEventListener('input', () => {
@@ -59,12 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchDataAndDisplay(); // Fetch data when key changes
   });
 
+  apiKeyInput.addEventListener('input', () => {
+    chrome.storage.local.set({ apiKey: apiKeyInput.value });
+    fetchDataAndDisplay(); // Fetch data when key changes
+  });
+
   fetchBtn.addEventListener('click', fetchDataAndDisplay); // Keep existing fetch button functionality
 
   scrapeBtn.addEventListener('click', () => {
     const key = keyInput.value.trim();
-    if (!key) {
-      statusParagraph.textContent = 'Please enter a key before scraping.';
+    const apiKey = apiKeyInput.value.trim();
+    if (!key || !apiKey) {
+      statusParagraph.textContent = 'Please enter a key and API key before scraping.';
       statusParagraph.style.color = 'orange';
       return;
     }
@@ -79,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`,
             },
             body: JSON.stringify({ key, ...productData }),
           })
@@ -110,10 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   clearBtn.addEventListener('click', () => {
     const key = keyInput.value.trim();
-    if (key) {
+    const apiKey = apiKeyInput.value.trim();
+    if (key && apiKey) {
       statusParagraph.textContent = 'Clearing data...';
-      fetch(`http://localhost:3000/clear/${key}`, {
+      fetch(`http://localhost:3000/clear/${key}`,
+      {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        }
       })
         .then(response => {
           if (response.ok) {

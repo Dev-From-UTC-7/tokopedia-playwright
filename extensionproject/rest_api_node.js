@@ -8,6 +8,23 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 const PORT = 3000;
+const API_KEY = process.env.API_KEY;
+
+// Middleware for API key authorization
+const apiKeyAuth = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).send('Authorization header is missing or invalid.');
+  }
+  const providedApiKey = authHeader.split(' ')[1];
+  if (providedApiKey !== API_KEY) {
+    return res.status(403).send('Invalid API key.');
+  }
+  next();
+};
+
+// Apply the authorization middleware to all routes
+app.use(apiKeyAuth);
 
 // Handle POST requests to add data
 app.post('/', async (req, res) => {

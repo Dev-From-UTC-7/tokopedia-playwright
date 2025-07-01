@@ -10,7 +10,7 @@
       position: relative; /* For positioning the clear button */
       padding-bottom: 50px; /* Space for the fixed clear button */
     }
-    #key-input {
+    #key-input, #api-key-input {
       width: calc(100% - 22px);
       padding: 10px;
       margin-bottom: 10px;
@@ -83,6 +83,7 @@
   </style>
 </head>
 <body>
+  <input type="text" id="api-key-input" placeholder="Enter API key...">
   <input type="text" id="key-input" placeholder="Enter key...">
   <div style="display: flex; gap: 5px; margin-bottom: 10px;">
     <button id="fetchBtn" style="flex-grow: 1;">Fetch Data</button>
