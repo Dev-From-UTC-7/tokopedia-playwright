@@ -5,50 +5,56 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0">
-  <title>Multi-Seller Search</title>
+  <title>Multi-Seller Search - Material Design</title>
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+
   <style>
     body {
-      font-family: sans-serif;
-      margin: 20px;
       background-color: #f4f4f4;
       color: #333;
     }
 
     .container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
     }
 
-    label {
+    .card-panel {
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      /* Adjust H1 size for Material feel */
+      margin-bottom: 2rem;
+    }
+
+    /* Add some margin between buttons */
+    .btn,
+    .btn-large,
+    .btn-small {
+      margin-right: 10px;
+      margin-bottom: 10px;
+      /* For stacking on small screens */
+    }
+
+    #linksContainer ul {
+      margin-top: 10px;
+    }
+
+    #linksContainer li a {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      /* Make entire list item clickable area bigger */
+      padding: 8px 0;
+      color: #007bff;
+      /* Or use Materialize primary color */
     }
 
-    input[type="text"],
-    select {
-      width: calc(100% - 22px);
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
+    #linksContainer li a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -56,130 +62,149 @@
 <body>
 
   <div class="container">
-    <h1>Multi-Seller Product Search</h1>
+    <div class="card-panel">
+      <h1 class="center-align">Multi-Seller Product Search</h1>
 
-    <div>
-      <label for="keyword">Search Keyword:</label>
-      <input type="text"
-        id="keyword"
-        placeholder="Enter product keyword">
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <i class="material-icons prefix">search</i>
+          <input type="text"
+            id="keyword"
+            placeholder="Enter product keyword">
+          <label for="keyword">Search Keyword:</label>
+        </div>
+
+        <div class="input-field col s12 m6">
+          <i class="material-icons prefix">category</i>
+          <select id="category">
+            <option value=""
+              disabled
+              selected>Choose your category</option>
+          </select>
+          <label for="category">Select Category:</label>
+        </div>
+      </div>
+
+      <div class="row center-align"
+        style="margin-top: 20px;">
+        <button class="btn waves-effect waves-light blue darken-2"
+          onclick="openSellerTabs()">
+          Open in New Tabs
+          <i class="material-icons right">open_in_new</i>
+        </button>
+      </div>
     </div>
-
-    <div>
-      <label for="category">Select Category:</label>
-      <select id="category">
-      </select>
-    </div>
-
-    <button onclick="openSellerTabs()">Search in New Tabs</button>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-    // Seller groups data (copied from your Playwright script)
+    // Initialize Materialize components
+    document.addEventListener('DOMContentLoaded', function () {
+      M.AutoInit(); // Initializes all Materialize components
+      // Or, if you want to be specific:
+      // var selectElems = document.querySelectorAll('select');
+      // M.FormSelect.init(selectElems);
+    });
+
+    // Seller groups data
     const sellerGroups = {
       computer: [
-        'https://www.tokopedia.com/gamingpcstore',
-        'https://www.tokopedia.com/multipro-id',
-        'https://www.tokopedia.com/enterkomputer',
-        'https://www.tokopedia.com/cockomputer',
-        'https://www.tokopedia.com/nanokomputer',
-        'https://www.tokopedia.com/rakitancom',
-        'https://www.tokopedia.com/duniastorage',
-        'https://www.tokopedia.com/nvidiageforce',
-        'https://www.tokopedia.com/gasol',
-        'https://www.tokopedia.com/tokoexpert',
-        'https://www.tokopedia.com/distributorpc',
-        'https://www.tokopedia.com/imbapc',
-        'https://www.tokopedia.com/tonixcomp',
-        'https://www.tokopedia.com/redteknologi',
-        'https://www.tokopedia.com/jayapc',
-        'https://www.tokopedia.com/amd-component',
-        'https://www.tokopedia.com/it-shoponline',
-        'https://www.tokopedia.com/msi-id',
-        'https://www.tokopedia.com/agreskomputerofficial',
-        'https://www.tokopedia.com/onelinegamepc'
+        'https://www.tokopedia.com/gamingpcstore', 'https://www.tokopedia.com/multipro-id',
+        'https://www.tokopedia.com/enterkomputer', 'https://www.tokopedia.com/cockomputer',
+        'https://www.tokopedia.com/nanokomputer', 'https://www.tokopedia.com/rakitancom',
+        'https://www.tokopedia.com/duniastorage', 'https://www.tokopedia.com/nvidiageforce',
+        'https://www.tokopedia.com/gasol', 'https://www.tokopedia.com/tokoexpert',
+        'https://www.tokopedia.com/distributorpc', 'https://www.tokopedia.com/imbapc',
+        'https://www.tokopedia.com/tonixcomp', 'https://www.tokopedia.com/redteknologi',
+        'https://www.tokopedia.com/jayapc', 'https://www.tokopedia.com/amd-component',
+        'https://www.tokopedia.com/it-shoponline', 'https://www.tokopedia.com/msi-id',
+        'https://www.tokopedia.com/agreskomputerofficial', 'https://www.tokopedia.com/onelinegamepc'
       ],
       skincare: [
-        'https://www.tokopedia.com/schminkhaus',
-        'https://www.tokopedia.com/nihonmart',
-        'https://www.tokopedia.com/klairsid',
-        'https://www.tokopedia.com/thenakedseries',
-        'https://www.tokopedia.com/beautyhaulindo',
-        'https://www.tokopedia.com/beautyofjoseon',
-        'https://www.tokopedia.com/skin-1004',
-        'https://www.tokopedia.com/venuss8'
+        'https://www.tokopedia.com/schminkhaus', 'https://www.tokopedia.com/nihonmart',
+        'https://www.tokopedia.com/klairsid', 'https://www.tokopedia.com/thenakedseries',
+        'https://www.tokopedia.com/beautyhaulindo', 'https://www.tokopedia.com/beautyofjoseon',
+        'https://www.tokopedia.com/skin-1004', 'https://www.tokopedia.com/venuss8'
       ],
-      // Add more categories here if needed
     };
 
     // Function to populate the category dropdown
     function populateCategories() {
       const categorySelect = document.getElementById('category');
       if (categorySelect) {
+        // Clear existing options except the disabled one
+        while (categorySelect.options.length > 1) {
+          categorySelect.remove(1);
+        }
         Object.keys(sellerGroups).forEach(categoryName => {
           const option = document.createElement('option');
           option.value = categoryName;
-          option.textContent = categoryName.charAt(0).toUpperCase() + categoryName.slice(1); // Capitalize first letter
+          option.textContent = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
           categorySelect.appendChild(option);
         });
+        // Re-initialize the select if options are added dynamically after M.AutoInit()
+        M.FormSelect.init(categorySelect);
       } else {
         console.error("Category select element not found.");
       }
     }
 
-    // Function to open seller tabs
-    function openSellerTabs() {
+    // Call populateCategories on load, but after Materialize might have initialized.
+    // DOMContentLoaded is generally better for this.
+    document.addEventListener('DOMContentLoaded', function () {
+      populateCategories(); // Populate categories first
+      M.AutoInit();       // Then initialize Materialize components
+    });
+
+
+    function getKeywordAndCategory() {
       const keywordInput = document.getElementById('keyword');
       const categorySelect = document.getElementById('category');
 
       if (!keywordInput || !categorySelect) {
-        alert("Error: Input or select element not found!");
-        return;
+        M.toast({ html: 'Error: Input or select element not found!', classes: 'red' });
+        return null;
       }
 
       const keyword = keywordInput.value.trim();
       const selectedCategory = categorySelect.value;
 
       if (!keyword) {
-        alert("Please enter a search keyword.");
-        return;
+        M.toast({ html: 'Please enter a search keyword.', classes: 'orange' });
+        return null;
       }
 
       if (!selectedCategory || !sellerGroups[selectedCategory]) {
-        alert("Please select a valid category.");
-        return;
+        M.toast({ html: 'Please select a valid category.', classes: 'orange' });
+        return null;
       }
+      return { keyword, selectedCategory, baseUrls: sellerGroups[selectedCategory] };
+    }
 
-      const baseUrls = sellerGroups[selectedCategory];
+    // Function to open seller tabs
+    function openSellerTabs() {
+      const searchData = getKeywordAndCategory();
+      if (!searchData) return;
+
+      const { keyword, baseUrls } = searchData;
+
       baseUrls.forEach(baseUrl => {
         const searchUrl = `${baseUrl}/product?q=${encodeURIComponent(keyword)}`;
-        // Open each URL in a new tab
-        // window.open(searchUrl, '_blank'); // This might be blocked by popup blockers if too many are opened rapidly
-
-        // A slightly more robust way that might have better chances against popup blockers for the first few clicks,
-        // but browsers will still likely block rapid successive calls.
-        // For many URLs, the browser's popup blocker will likely intervene.
-        // This is a browser security feature to prevent malicious sites from opening too many unwanted tabs.
         try {
           const newTab = window.open(searchUrl, '_blank');
           if (newTab) {
-            newTab.focus(); // Optional: bring the new tab to the front
+            newTab.focus();
           } else {
-            // This might happen if the popup was blocked
-            console.warn(`Could not open tab for ${searchUrl}. It might have been blocked by a popup blocker.`);
-            alert(`Opening tab for ${searchUrl} was blocked. Please check your browser's popup blocker settings. You might need to allow popups for this site.`);
+            console.warn(`Could not open tab for ${searchUrl}. It might have been blocked.`);
+            M.toast({ html: `Popup blocked for ${baseUrl}. Check browser settings.`, classes: 'red', displayLength: 5000 });
           }
         } catch (e) {
           console.error(`Error opening tab for ${searchUrl}:`, e);
-          alert(`An error occurred while trying to open a tab for ${searchUrl}.`);
+          M.toast({ html: `Error opening tab for ${baseUrl}.`, classes: 'red' });
         }
       });
     }
-
-    // Populate categories when the page loads
-    window.onload = populateCategories;
   </script>
-
 </body>
 
 </html>
