@@ -23,6 +23,11 @@ const apiKeyAuth = (req, res, next) => {
   next();
 };
 
+// Ping endpoint (no auth required)
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 // Apply the authorization middleware to all routes
 app.use(apiKeyAuth);
 

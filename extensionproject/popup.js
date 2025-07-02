@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = apiKeyInput.value.trim();
     if (key && apiKey) {
       resultsContainer.innerHTML = 'Loading...';
-      fetch(`http://localhost:3000/${key}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-        }
-      })
+      fetch(`http://wishlisttokped.imtheluckiest.com/${key}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+          }
+        })
         .then(response => response.json())
         .then(data => {
           resultsContainer.innerHTML = '';
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const priceSpan = document.createElement('span');
               priceSpan.className = 'product-price';
               priceSpan.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.price);
-
+              priceSpan.textContent = priceSpan.textContent.replace(/,00$/, '');
               row.appendChild(nameSpan);
               row.appendChild(priceSpan);
               resultsContainer.appendChild(row);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (response && response.status === 'success' && response.data) {
           const productData = response.data;
           // Now send this data to your backend
-          fetch('http://localhost:3000/', {
+          fetch('http://wishlisttokped.imtheluckiest.com/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
               console.error('Error sending data to backend:', error);
-              statusParagraph.textContent = 'Error sending data to backend.';
+              statusParagraph.textContent = `Error sending data to backend. ${error.message}`;
               statusParagraph.style.color = 'red';
             });
         } else if (response && response.status === 'error') {
@@ -130,13 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = apiKeyInput.value.trim();
     if (key && apiKey) {
       statusParagraph.textContent = 'Clearing data...';
-      fetch(`http://localhost:3000/clear/${key}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-        }
-      })
+      fetch(`http://wishlisttokped.imtheluckiest.com/clear/${key}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+          }
+        })
         .then(response => {
           if (response.ok) {
             statusParagraph.textContent = 'Data cleared successfully!';
